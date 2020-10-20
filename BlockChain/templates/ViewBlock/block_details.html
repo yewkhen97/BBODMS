@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="">{{ block.index }}</a>
+              <small class="text-muted">{{  block.timestamp }}</small>
+            </div>
+              <h2 class="article-title">{{ block.OrganName }}</h2>
+              <p class="article-content">{{ block.OrganOwner }}</p>           
+          </div>      
+        </article>
+{% endblock content %}

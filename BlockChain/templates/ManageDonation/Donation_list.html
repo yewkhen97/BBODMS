@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+     {% for i in donation %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#">{{ i.pic.username }}</a>
+              <small class="text-muted">{{ i.donate_date.strftime('%Y-%m-%d') }}</small>
+            </div>
+            <h2><a class="article-title" href="{{ url_for('ManageDonation.donation_details', donation_id=i.id) }}">{{  i.OrganOwner }}</a></h2>
+            <p class="article-content">{{  i.OrganName }}</p>
+          </div>
+        </article>
+  {% endfor %}
+{% endblock content %}

@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{{ url_for('users.view_account', account_id=donation.pic.id) }}">{{ donation.pic.username }}</a>
+              <small class="text-muted">{{  donation.donate_date.strftime('%Y-%m-%d')}}</small>
+            </div>
+              <h2 class="article-title">{{ donation.OrganName }}</h2>
+              <p class="article-content">{{ donation.OrganOwner }}</p>
+              {% if current_user.userType != "normal" %}
+              <form method="post" action="">
+                {{ form.hidden_tag() }}
+                <fieldset>
+                  <div class="form-group">
+                    {{ form.approval_status.label(class="form-control-label") }}
+
+                    {% if form.approval_status.errors %}
+                        {{ form.approval_status(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.approval_status.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.approval_status(class="form-control form-control-lg") }}
+                    {% endif %}
+                    </div>
+                    <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info") }}
+                </div>
+                </fieldset> 
+            </form>
+            {% else %}
+            <p class="article-content">{{ donation.approval_status }}</p>
+            {% endif %}
+              </div>    
+               
+        </article>
+{% endblock content %}

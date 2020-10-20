@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+  {% if result != validated %}
+      <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="#"></a>
+            </div>
+            <small class="text-muted"></small>
+          </div>
+        </article>
+    {% else %}
+      {% for i in chain %}
+          <article class="media content-section">
+            <div class="media-body">
+              <div class="article-metadata">
+                <a class="mr-2" href="{{ url_for('BlockRoute.block_details', block_id=i.index) }}">{{ i.index }}</a>
+              </div>
+              <small class="text-muted">{{ i.OrganName }}</small>
+            </div>
+          </article>
+      {% endfor %}
+    {% endif %}
+{% endblock content %}

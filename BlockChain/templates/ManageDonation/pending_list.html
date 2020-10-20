@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for i in list %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{{ url_for('users.view_account', account_id=i.pic.id) }}">{{ i.pic.username }}</a>
+              <small class="text-muted">{{  i.donate_date.strftime('%Y-%m-%d')}}</small>
+            </div>
+              <h2><a class="article-title" href="{{ url_for('ManageDonation.donation_details', donation_id=i.id) }}">{{ i.OrganName }}</a></h2>
+              <p class="article-content">{{ i.OrganOwner }}</p>
+              <p class="article-content">{{ i.approval_status }}</p>
+          </div>     
+        </article>
+    {% endfor %}
+{% endblock content %}
