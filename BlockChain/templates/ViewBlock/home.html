@@ -19,6 +19,26 @@
               <small class="text-muted">{{ i.OrganName }}</small>
             </div>
           </article>
+          
       {% endfor %}
     {% endif %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" crossorigin="anonymous"></script>
+          <script>
+            $(document).ready(function(){
+                  var current_ip = String(window.location.host);
+                    $.ajax({
+                    type: "POST",
+                    url: "{{ url_for('BlockRoute.show_current_ip') }}",
+                    contentType: "application/json",
+                    data: JSON.stringify({'node': current_ip}),
+                    dataType: "json",
+                    success: function(response){
+                      console.log(response);
+                    },
+                    error: function(response){
+                      console.log(response);
+                    }
+                  });
+                });
+        </script>
 {% endblock content %}

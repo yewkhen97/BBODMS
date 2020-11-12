@@ -1,6 +1,6 @@
 from BlockChain import db
 from BlockChain.models import Donation
-from BlockChain.BlockChain import *
+from BlockChain.blockchain import *
 from flask_login import current_user
 
 def set_donation(form):

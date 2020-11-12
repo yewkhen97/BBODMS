@@ -47,7 +47,7 @@ def cRegister():
         set_new_admin(form)
         flash(f'You have register account successfully! You are now able to log in!', 'success')
         return redirect(url_for('users.login'))
-    return render_template('ManageUser/cRegister.html', title='Register', form=form)
+    return render_template('/cRegister.html', title='Register', form=form)
 
 @users.route('/logout')
 def logout():
