@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<HTML>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+	$(document).ready(function(){
+			$("button").click(function(){
+				var current_ip = String(window.location.host);
+				$.ajax({
+					type: "POST",
+					url: "{{ url_for('BlockRoute.register_node') }}",
+					contentType: "application/json",
+					data: JSON.stringify({'node': current_ip}),
+					dataType: "json",
+					success: function(response){
+						console.log(response);
+					},
+					error: function(response){
+						console.log(response);
+					}
+				});
+			});
+		});
+</script>
+<body>
+	<button id="ipbtn">Get IP</button>
+</body>
+
+
+</HTML>
