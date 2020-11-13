@@ -1,8 +1,9 @@
 from flask import (render_template, url_for, flash,
-                   redirect, request, Blueprint)
+                   redirect, request, Blueprint, jsonify)
 from flask_login import login_required
 from BlockChain.Controller.ManageDonation.Form import DonationForm,approvalForm
-from BlockChain.Model.ManageDonationModel.DonationModel import set_donation, get_pending_List, get_details, set_approve_status,get_donation_list
+from BlockChain.Model.ManageDonationModel.DonationModel import (set_donation, get_pending_List, get_details,
+                                                                set_approve_status,get_donation_list, mine_new_block)
 
 ManageDonation = Blueprint('ManageDonation', __name__)
 
@@ -24,11 +25,13 @@ def New_Donation():
     return render_template('ManageDonation/create_donation.html', title='New Donation',
                            form=form, legend='New Donation')
 
+
 @ManageDonation.route("/pending_list", methods=['GET', 'POST'])
 @login_required
 def pending_list():
-    list = get_pending_List()
-    return render_template('ManageDonation/pending_list.html', list=list)
+    pending_list = get_pending_List()
+    return render_template('ManageDonation/pending_list.html', list=pending_list)
+
 
 @ManageDonation.route("/pending_donation/<int:donation_id>",methods=['GET', 'POST'])
 def donation_details(donation_id):
@@ -41,3 +44,13 @@ def donation_details(donation_id):
     elif request.method == 'GET':
         form.approval_status.data = donation.approval_status
     return render_template('ManageDonation/donation_detail.html', title=donation.OrganName, donation=donation, form=form)
+
+
+@ManageDonation.route("/mine_block")
+def mine_block():
+    if not mine_new_block():
+        response = {"message": "Resolve Conflicts first"}
+        print("resolve conflict")
+        return jsonify(response), 409
+    response = {"message": "All work well"}
+    return jsonify(response), 200

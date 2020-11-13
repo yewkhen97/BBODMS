@@ -4,9 +4,8 @@ import glob
 from datetime import datetime
 import pytz
 import requests
-import socket
-hostname = socket.gethostname()
-local_ip = socket.gethostbyname(hostname)
+import os
+
 
 class Block:
     def __init__(self, index, OrganOwner, OrganName, timestamp, previous_hash, nonce):
@@ -25,10 +24,9 @@ class BlockChain:
 
     def __init__(self, port):
         self.chain = []
-        self.chain_retrive()
         self.host_node = port
         self.peer = set()
-        self.load_node()
+        self.resolve_conflict = False
 
 
     def get_chain(self):
@@ -36,29 +34,12 @@ class BlockChain:
 
     def genesis_block(self):
         genesis_block = Block(0, "0","0", 0, "0",0)
-        Genesis = {
-            "index": genesis_block.index,
-            "OrganOwner": genesis_block.OrganOwner,
-            "OrganName": genesis_block.OrganName,
-            "timestamp": genesis_block.timestamp,
-            "previous_hash": genesis_block.previous_hash,
-            "nonce": genesis_block.nonce
-        }
-        fileName=("BlockChainFile{}/Block %d.json".format(self.port) %(Genesis.index))
-        GenesisFile = json.dumps(Genesis, indent=6)
-        with open(fileName, 'w') as f:
-            f.write(GenesisFile)
-            f.close()
-
-
+        self.add_block(genesis_block)
 
     def add_block(self, block):
         """
-        A function that adds the block to the chain after verification.
-        Verification includes:
-        * Checking if the proof is valid.
-        * The previous_hash referred in the block and the hash of latest block
-          in the chain match.
+        function to save the block locally after validation
+
         """
         newBlock = {
             "index": block.index,
@@ -68,11 +49,11 @@ class BlockChain:
             "previous_hash": block.previous_hash,
             "nonce": block.nonce
         }
-
-        fileName=("BlockChainFile{}/Block %d.json".format(self.port) %(block.index))
-        nextBlock = json.dumps(newBlock, indent=6)
-        with open(fileName, 'w') as f:
-            f.write(nextBlock)
+        _string_host, string_port = str(self.host_node).split(":")
+        file_name = "BlockChainFile{}/Block {}.json".format(string_port, block.index)
+        next_block = json.dumps(newBlock, indent=6)
+        with open(file_name, 'w') as f:
+            f.write(next_block)
             f.close()
         return True
 
@@ -92,29 +73,38 @@ class BlockChain:
 
     #function for chain file validation and hash validation, hash recompute function is missing
     def chain_retrive(self):
-        list=[]
-        i=0
-        path = 'BlockChainFile/*.json'
+        _string_host, string_port = str(self.host_node).split(":")
+        file_name='BlockChainFile/Block 0.json'.format(string_port)
+
+        if not os.path.isdir('BlockChainFile{}'.format(string_port)):
+            os.mkdir('BlockChainFile{}'.format(string_port))
+        if not os.path.isdir(file_name):
+            self.genesis_block()
+
+        chain_list=[]
+        path = 'BlockChainFile{}/*.json'.format(string_port)
         files = glob.glob(path)
         for name in files:
-           with open(name) as f:
-               block_file = json.loads(f.read())
-               list.append(Block(**block_file))
+            with open(name) as f:
+                block_file = json.loads(f.read())
+                chain_list.append(Block(**block_file))
 
-        sortedList = sorted(list, key=lambda i: i.index)
+        sorted_list = sorted(chain_list, key=lambda i: i.index)
 
-        for num in sortedList:
+        for num in sorted_list:
             self.chain.append(num)
 
         result = verfication.chain_validation(self.chain)
         return result
 
+    # function for synchronize the blockchain data
     def sync_block(self, block):
-        proof_is_valid = verfication.valid_proof(block['previous_hash'], block['proof'])
+        proof_is_valid = verfication.valid_proof(block['previous_hash'], block['nonce'])
         hash_match = compute_hash(self.chain[-1]) == block['previous_hash']
-        if not proof_is_valid and hash_match:
+        if not proof_is_valid or not hash_match:
             return False
-        converted_block = Block(block['index'], block['OrganOwner'], block['OrganName'], block['timestamp'],block['previous_hash'],block['nonce'])
+        converted_block = Block(block['index'], block['OrganOwner'], block['OrganName'],
+                                block['timestamp'],block['previous_hash'],block['nonce'])
         self.chain.append(converted_block)
         self.add_block(converted_block)
         return True
@@ -125,6 +115,11 @@ class BlockChain:
         transactions to the blockchain by adding them to the block
         and figuring out Proof Of Work.
         """
+
+        if not self.get_chain():
+            self.chain_retrive()
+        else:
+            print(self.chain)
         last_block = self.last_block
         hashed_block = compute_hash(last_block)
         proof = self.proof_of_work(hashed_block)
@@ -143,28 +138,67 @@ class BlockChain:
                           )
         self.chain.append(new_block)
         self.add_block(new_block)
+        self.load_node()
         for node in self.peer:
-            url = "http://{}/broadcast_block".format(node)
-            converted_block = new_block.__dict__.copy()
             try:
+                url = "http://{}/broadcast_block".format(node)
+                converted_block = new_block.__dict__.copy()
                 response = requests.post(url, json={'block': converted_block})
                 if response.status_code == 400 or response.status_code == 500:
-                    print("Block declined")
+                    print("Block declined (function mine)")
+                if response.status_code == 409:
+                    self.resolve_conflict = True
                     return False
             except requests.exceptions.ConnectionError:
                 continue
-
-
         return True
 
-    def add_node(self, node):
-        self.peer.add(node)
+    def blockchain_consensus(self):
+        temp_chain = self.chain
+        replace = False
+        for node in self.peer:
+            url = 'http://{}/chain'.format(node)
+            try:
+                response = requests.get(url)
+                node_chain = response.json()
+                node_chain = [Block(block['index'], block['OrganOwner'], block['OrganName'],
+                            block['timestamp'],block['previous_hash'],block['nonce']) for block in node_chain]
+                node_chain_length = len(node_chain)
+                local_chain_length = len(self.chain)
+                if node_chain_length > local_chain_length and verfication.chain_validation(node_chain):
+                    temp_chain = node_chain
+                    replace = True
+            except requests.exceptions.ConnectionError:
+                continue
+        self.resolve_conflict = False
+        self.chain = temp_chain
+        for block in self.chain:
+            self.add_block(block)
+        return replace
+
+    # Code Section for node
+
+    def add_node(self, nodes, is_received=False):
+        self.load_node()
+        self.peer.add(nodes)
         self.set_node()
+        if not is_received:
+            for node in self.peer:
+                try:
+                    url = 'http://{}/broadcast_node'.format(node)
+                    response = requests.post(url, json={"nodes": nodes})
+                    if response.status_code == 400 or response.status_code == 500:
+                        print("node broadcast problem")
+                        return False
+                    return True
+                except requests.exceptions.ConnectionError:
+                    continue
 
     def load_node(self):
+        _string_host, string_port = str(self.host_node).split(":")
         try:
-            fileName = "BlockChain/peer_node{}.txt".format(self.host_node)
-            with open(fileName, mode='r') as f:
+            file_name = "BlockChain/peer_node{}.txt".format(string_port)
+            with open(file_name, mode='r') as f:
                 peer = json.loads(f.read())
                 self.peer = set(peer)
                 f.close()
@@ -172,16 +206,12 @@ class BlockChain:
             self.peer = set()
 
     def set_node(self):
-        port = self.host_node
-        print("set port:", port)
-        #fileName = "BlockChain/peer_node{}.txt".format(self.host_node)
-        #print(fileName)
-        print("current node in set node: ", self.host_node)
-        print(self.peer)
-        #with open(fileName, mode='w') as f:
-        #    peer = json.dumps(list(self.peer))
-        #    f.write(peer)
-        #    f.close()
+        _string_host, string_port = str(self.host_node).split(":")
+        file_name = "BlockChain/peer_node{}.txt".format(string_port)
+        with open(file_name, mode='w') as f:
+            peer = json.dumps(list(self.peer))
+            f.write(peer)
+            f.close()
 
     def remove_node(self, node):
         self.peer.discard(node)
