@@ -5,7 +5,7 @@
 
 	$(document).ready(function(){
 			$("button").click(function(){
-				var current_ip = String(window.location.host);
+				var current_ip = $('#ip').val();
 				$.ajax({
 					type: "POST",
 					url: "{{ url_for('BlockRoute.register_node') }}",
@@ -23,6 +23,7 @@
 		});
 </script>
 <body>
+	<input type="text" id="ip">
 	<button id="ipbtn">Get IP</button>
 </body>
 
