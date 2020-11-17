@@ -23,14 +23,18 @@ class BlockChain:
     difficulty = 2
 
     def __init__(self, port):
-        self.chain = []
+        self.__chain = []
         self.host_node = port
         self.peer = set()
         self.resolve_conflict = False
 
+    @property
+    def chain(self):
+        return self.__chain[:]
 
-    def get_chain(self):
-        return self.chain[:]
+    @chain.setter
+    def chain(self, val):
+        self.__chain = val
 
     def genesis_block(self):
         genesis_block = Block(0, "0","0", 0, "0",0)
@@ -59,7 +63,7 @@ class BlockChain:
 
     @property
     def last_block(self):
-        return self.chain[-1]
+        return self.__chain[-1]
 
     def proof_of_work(self, hashed_block):
         proof = 0
@@ -73,6 +77,7 @@ class BlockChain:
 
     #function for chain file validation and hash validation, hash recompute function is missing
     def chain_retrive(self):
+
         _string_host, string_port = str(self.host_node).split(":")
         file_name='BlockChainFile/Block 0.json'.format(string_port)
 
@@ -92,20 +97,20 @@ class BlockChain:
         sorted_list = sorted(chain_list, key=lambda i: i.index)
 
         for num in sorted_list:
-            self.chain.append(num)
+            self.__chain.append(num)
 
-        result = verfication.chain_validation(self.chain)
+        result = verfication.chain_validation(self.__chain)
         return result
 
     # function for synchronize the blockchain data
     def sync_block(self, block):
         proof_is_valid = verfication.valid_proof(block['previous_hash'], block['nonce'])
-        hash_match = compute_hash(self.chain[-1]) == block['previous_hash']
+        hash_match = compute_hash(self.__chain[-1]) == block['previous_hash']
         if not proof_is_valid or not hash_match:
             return False
         converted_block = Block(block['index'], block['OrganOwner'], block['OrganName'],
                                 block['timestamp'],block['previous_hash'],block['nonce'])
-        self.chain.append(converted_block)
+        self.__chain.append(converted_block)
         self.add_block(converted_block)
         return True
 
@@ -115,12 +120,7 @@ class BlockChain:
         transactions to the blockchain by adding them to the block
         and figuring out Proof Of Work.
         """
-
-        if not self.get_chain():
-            self.chain_retrive()
-        else:
-            print(self.chain)
-        last_block = self.last_block
+        last_block = self.__chain[-1]
         hashed_block = compute_hash(last_block)
         proof = self.proof_of_work(hashed_block)
         new_index = int(last_block.index)
@@ -136,9 +136,8 @@ class BlockChain:
                          previous_hash=hashed_block,
                          nonce=proof
                           )
-        self.chain.append(new_block)
+        self.__chain.append(new_block)
         self.add_block(new_block)
-        self.load_node()
         for node in self.peer:
             try:
                 url = "http://{}/broadcast_block".format(node)
@@ -146,6 +145,7 @@ class BlockChain:
                 response = requests.post(url, json={'block': converted_block})
                 if response.status_code == 400 or response.status_code == 500:
                     print("Block declined (function mine)")
+                    return False
                 if response.status_code == 409:
                     self.resolve_conflict = True
                     return False
@@ -156,7 +156,10 @@ class BlockChain:
     def blockchain_consensus(self):
         temp_chain = self.chain
         replace = False
+        self.peer.clear()
+        self.load_node()
         for node in self.peer:
+            print("Consensus 1")
             url = 'http://{}/chain'.format(node)
             try:
                 response = requests.get(url)
@@ -164,15 +167,24 @@ class BlockChain:
                 node_chain = [Block(block['index'], block['OrganOwner'], block['OrganName'],
                             block['timestamp'],block['previous_hash'],block['nonce']) for block in node_chain]
                 node_chain_length = len(node_chain)
-                local_chain_length = len(self.chain)
+                count = 0
+                for block in node_chain:
+                    print(block.index)
+                print("count:", count)
+                print("Node chain len:", node_chain_length)
+                local_chain_length = len(self.__chain)
+                print("Local chain len:", local_chain_length)
+                print("Consensus 2")
                 if node_chain_length > local_chain_length and verfication.chain_validation(node_chain):
                     temp_chain = node_chain
                     replace = True
+                    print("Consensus 3")
             except requests.exceptions.ConnectionError:
                 continue
         self.resolve_conflict = False
+
         self.chain = temp_chain
-        for block in self.chain:
+        for block in self.__chain:
             self.add_block(block)
         return replace
 

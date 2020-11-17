@@ -14,7 +14,8 @@ class verfication:
             if index == 0:
                 continue
             if block.previous_hash != compute_hash(blockchain[index - 1]):
-                print("error")
+                print(f"block {block.index} has problem.")
+                print("Hash not match")
                 return False
             if not cls.valid_proof(block.previous_hash, block.nonce):
                 print('Proof of work is invalid')

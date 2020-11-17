@@ -38,27 +38,32 @@ def set_approve_status(form, donation):
 def retrieve_confirmed_donation():
     new_donation = Donation.query.filter_by(approval_status='Approved').first()
     new_mine = BlockChain(session['current_node'])
-    print("current session in donation model:",session['current_node'] )
+    print("current session in donation model:",session['current_node'])
     new_mine.chain_retrive()
-    print(new_mine.get_chain())
+    print(new_mine.chain)
     if new_mine.mine(new_donation):
+        if new_mine.resolve_conflict:
+            return False
         new_donation.approval_status = "Added"
     else:
+        print("Resolve conflict: ",new_mine.resolve_conflict)
         print("some thing wrong when adding new block")
         new_donation.approval_status = "Approved"
     db.session.commit()
-
+    return True
 
 def mine_new_block():
-    donation_list = Donation.query.filter_by(approval_status='Approved')
+    donation_list = Donation.query.filter_by(approval_status='Added')
     new_mine = BlockChain(session['current_node'])
     new_mine.chain_retrive()
+    new_mine.load_node()
     for donation in donation_list:
         if new_mine.resolve_conflict:
             return False
         if new_mine.mine(donation):
             donation.approval_status = "Added"
         else:
+            print("Resolve conflict: ", new_mine.resolve_conflict)
             print("some thing wrong when adding new block")
             donation.approval_status = "Approved"
     db.session.commit()
