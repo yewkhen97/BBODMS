@@ -1,29 +1,33 @@
 {% extends "layout.html" %}
 {% block content %}
-  {% if result != validated %}
-      <article class="media content-section">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="#"></a>
-            </div>
-            <small class="text-muted"></small>
-          </div>
-        </article>
-    {% else %}
-      {% for i in chain %}
-          <article class="media content-section">
-            <div class="media-body">
-              <div class="article-metadata">
-                <a class="mr-2" href="{{ url_for('BlockRoute.block_details', block_id=i.index) }}">{{ i.index }}</a>
-              </div>
-              <small class="text-muted">{{ i.OrganName }}</small>
-            </div>
-          </article>
+<div class="col-md-6 ml-auto col-md-7 mr-auto">
+                <div class="input-group">
+                    <input class="form-control" id="block-search" name="q" placeholder="Search by Organ Name" autocomplete="false" required>
+                </div>
+        </div>
+    <div class="col-md-6 ml-auto col-md-7 mr-auto">
+
+      <div class="container">
+        <div class="block-table">
+        <table class="table" style="table-layout: fixed; width: 100%" id="tablehome">
+          <thead>
+            <tr>
+              <th>Block Index</th>
+              <th style="width:35%;">Block Hash</th>
+              <th>Organ</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyhome"></tbody>
           
-      {% endfor %}
-    {% endif %}
+        </table>
+      </div>
+      </div>
+    </div>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" crossorigin="anonymous"></script>
           <script>
+            const tbodyEl = document.getElementById("tbodyhome");
             $(document).ready(function(){
                   var current_ip = String(window.location.host);
                     $.ajax({
@@ -40,5 +44,54 @@
                     }
                   });
                 });
-        </script>
+            $(document).ready(function(){
+                    $.ajax({
+                    type: "GET",
+                    url: "{{ url_for('BlockRoute.retrieve_chain') }}",
+                    success: function(response){
+                      console.log(response);
+                      var data = response;
+                      data.reverse();
+                      tbodyEl.innerHTML="";
+                    for(var counter=0; counter<data.length-1; counter++){
+                      var hash_string = data[counter].previous_hash;
+                      var show_hash = hash_string.substring(0, 20);
+                      show_hash = show_hash.concat("...");
+                      var datetime = new Date(data[counter].timestamp)
+                      var formatedDate = datetime.toLocaleDateString('en-GB', {
+                                          day: 'numeric', month: 'short', year: 'numeric'
+                                        }).replace(/ /g, '-');
+                      tbodyEl.innerHTML += `
+                          <form method="POST" class="blockform" action="{{url_for('BlockRoute.block_details')}}">
+                          <tr class="home_table_row" onclick="submitform()">
+                              <input  type="hidden" name="block_id" value="${data[counter].index}"/>
+                          </form>
+                              <td>${data[counter].index}</td>
+                              <td><div class="tooltips">${show_hash}<span id="tooltiptext">${data[counter].previous_hash}</span></div></td>
+                              <td>${data[counter].OrganName}</td>
+                              <td>${formatedDate}</td>
+                          </tr>
+                         
+                      `;
+                      }
+                    },
+                    error: function(response){
+                      console.log(response);
+                    }
+                  });
+                });
+
+            $(document).ready(function(){
+              $("#block-search").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#tbodyhome tr").filter(function() {
+                  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+              });
+            });
+            function submitform(){
+              $(".blockform").submit(); // Submit the form
+            }
+
+       </script>
 {% endblock content %}

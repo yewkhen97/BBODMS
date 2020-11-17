@@ -6,8 +6,9 @@ blockchain = BlockChain(ip_address)
 
 
 def get_chain():
+    blockchain.chain = []
     blockchain.chain_retrive()
-    existing_chain = blockchain.get_chain()
+    existing_chain = blockchain.chain
     return existing_chain
 
 
@@ -32,6 +33,7 @@ def set_session(current_node):
     global blockchain
     blockchain = BlockChain(session['current_node'])
     blockchain.chain_retrive()
+    blockchain.load_node()
     node = blockchain.get_port()
     if node == "":
         print("not node in chain")
