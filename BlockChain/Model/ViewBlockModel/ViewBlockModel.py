@@ -1,4 +1,4 @@
-from BlockChain.blockchain import BlockChain
+from BlockChain.blockchain import BlockChain, Block
 from flask import session
 
 ip_address = ""
@@ -32,15 +32,14 @@ def set_session(current_node):
     session['current_node'] = current_node['node']
     global blockchain
     blockchain = BlockChain(session['current_node'])
-    blockchain.chain_retrive()
     blockchain.load_node()
     node = blockchain.get_port()
     if node == "":
         print("not node in chain")
     else:
         print("node in blockchain: ", node)
-    all = get_node()
-    print("all peer: ", all)
+    all_peer = get_node()
+    print("all peer: ", all_peer)
 
 
 def save_broadcast_node(node):

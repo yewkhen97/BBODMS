@@ -1,8 +1,15 @@
 {
       "index": 1,
-      "OrganOwner": "Legion",
-      "OrganName": "kidney",
-      "timestamp": "2020-11-14T22:23:14.452684",
-      "previous_hash": "4d690d247bdf650895ed842c07f5b6a49cef85408e70e81282de863b1a4abdc1",
-      "nonce": 187
+      "donor": "Nam Dou Shan",
+      "organ_name": "Liver",
+      "blood_type": "A",
+      "height": 180.0,
+      "weight": 75.0,
+      "age": 27,
+      "hla_group": "HLA-A",
+      "timestamp": "2020-11-26T17:20:54.629446",
+      "update_from_block": 0,
+      "previous_hash": "9a226ba0de5e39ac6c1cbcdf960ba71548053267616ebea482d0c79e1ae51316",
+      "status": "Available",
+      "nonce": 71
 }

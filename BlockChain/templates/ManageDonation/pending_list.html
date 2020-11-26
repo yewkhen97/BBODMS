@@ -1,16 +1,209 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for i in list %}
-        <article class="media content-section">
-          <div class="media-body">
-            <div class="article-metadata">
-              <a class="mr-2" href="{{ url_for('users.view_account', account_id=i.pic.id) }}">{{ i.pic.username }}</a>
-              <small class="text-muted">{{  i.donate_date.strftime('%Y-%m-%d')}}</small>
+<div class="wrapper">
+<div class="page-header clear-filter" filter-color="red">
+      <div class="page-header-image" data-parallax="true" style="background-image:url('../static/assets/img/header.jpg');">
+      </div>
+<div class="col-md-6 ml-auto col-md-7 mr-auto">
+                <div class="input-group">
+                    <input class="form-control" id="block-search" name="q" placeholder="Type anything to search" autocomplete="false" required>
+                </div>
+        </div>
+    <div class="col-md-6 ml-auto col-md-7 mr-auto">
+
+      <div class="container">
+        <div class="block-table">
+        <table class="table" style="table-layout: fixed; width: 100%" id="tablehome">
+          <thead>
+            <tr>
+              <th>Donation ID</th>
+              <th style="width:35%;">Donor Name</th>
+              <th>Organ</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyhome"></tbody>
+        </table>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Start Modal -->
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header justify-content-center">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <i class="now-ui-icons ui-1_simple-remove"></i>
+            </button>
+            <h4 class="title title-up" id="modalTitle"></h4>
+          </div>
+
+          <div class="modal-body">
+             <div class="col-md-10 offset-md-2">
+              <form id="approveForm" class="form"method="POST" action="/set_approval">
+              <table id="modalTable">
+              
+              </table>
+            </form>
             </div>
-              <h2><a class="article-title" href="{{ url_for('ManageDonation.donation_details', donation_id=i.id) }}">{{ i.OrganName }}</a></h2>
-              <p class="article-content">{{ i.OrganOwner }}</p>
-              <p class="article-content">{{ i.approval_status }}</p>
-          </div>     
-        </article>
-    {% endfor %}
+          </div>
+          <div class="modal-footer" id="btnSection">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  End Modal -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" crossorigin="anonymous"></script>
+          <script>
+            var data;
+            if(data!=null)
+              data = null;
+            const tbodyEl = document.getElementById("tbodyhome");
+          $(document).ready(function(){
+                    data = [];
+                    $.ajax({
+                    type: "GET",
+                    url: "{{ url_for('ManageDonation.load_pending_list') }}",
+                    success: function(response){
+                      data = response;
+                      tbodyEl.innerHTML="";
+                      data.reverse();
+                    for(var counter=0; counter<data.length; counter++){
+                      var formatedDate = formatDate(data[counter].register_date);
+                      console.log(data);
+                      tbodyEl.innerHTML += `
+
+                          <tr class="home_table_row" data-toggle="modal" data-target="#myModal" onclick="to_record_details(${data[counter].id})">
+                              <td>${data[counter].id}</td>
+                              <td>${data[counter].donor}</td>
+                              <td>${data[counter].organ_name}</td>
+                              <td>${formatedDate}</td>
+                          </tr>
+                      `;
+                      }
+
+                    },
+                    error: function(response){
+                      console.log(response);
+                    }
+                  });
+                });
+          function formatDate(date){
+                var datetime = new Date(date);
+                dateStr = datetime.toLocaleDateString('en-GB', {
+                                          day: 'numeric', month: 'short', year: 'numeric'
+                                        }).replace(/ /g, '-');
+                timeStr = datetime.toLocaleTimeString('en-US');
+                return dateStr;
+            }
+            function formatTime(date){
+               var datetime = new Date(date);
+               timeStr = datetime.toLocaleTimeString('en-US');
+               return timeStr;
+            }
+            $(document).ready(function(){
+              $("#block-search").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#tbodyhome tr").filter(function() {
+                  $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+              });
+            });
+            function to_record_details(index){         
+                var printTable = document.getElementById("modalTable");
+                var printTitle = document.getElementById("modalTitle");
+                var printBtn = document.getElementById("btnSection");
+                var record = find_donation_record(index);
+                var date = formatDate(record.register_date);
+                var time = formatTime(date);
+                var status = check_donation_status(record);
+                printTitle.innerHTML = "Donation Record ID: "+record.id;
+                printTable.innerHTML = `
+                <tr>
+                     <td>Donor Name: </td>
+                     <td> ${record.donor}</td>
+                </tr>
+                <tr>
+                     <td>Donor Age: </td>
+                     <td> ${record.age}</td>
+                </tr>
+                <tr>
+                     <td>Organ: </td>
+                     <td>${record.organ_name}</td>
+                </tr>
+                <tr>
+                     <td>Blood Type: </td>
+                     <td> ${record.blood_type}</td>
+                </tr>
+                <tr>
+                     <td>Height: </td>
+                     <td> ${record.height}</td>
+                </tr>
+                <tr> 
+                     <td>Weight: </td>
+                     <td> ${record.weight}</td>
+                </tr>
+                <tr>
+                     <td>HLA Group: </td>
+                     <td> ${record.hla_group}</td>
+                </tr>
+                <tr>
+                     <td>Register Date: </td>
+                     <td>${date}</td>
+                </tr>
+                <tr>
+                     <td>Register Time: </td>
+                     <td>${time}</td>
+                </tr>
+                <tr>
+                     <td>Donation Status: </td>
+                     <td>${status}</td>
+                </tr>
+                
+                  <input type="hidden" name="record_id" value="${record.id}"/>
+                 <tr>
+                    <td>Set Approve Status: </td>
+                    <td> <select class="form-control"  name="approval">
+                          <option value="Approved">Approve</option>
+                          <option value="Rejected">Reject</option>
+                         </select></td>
+                 </tr>
+                 <tr>
+                 <td></td>
+                  <td><button type="submit" class="btn btn-primary">Submit</button></td>
+                 </tr> 
+
+                `;
+            }
+
+            function find_donation_record(index){
+              for(var counter=0; counter<data.length; counter++){
+                  if(data[counter].id==index){
+                        var record = data[counter];
+                        return record;
+                  }
+                }
+            }
+            function check_donation_status(record){
+              var status="Pending";
+                if(record.approval_status_1 == "Approved" && record.approval_status_2 == "Approved"
+                   && record.approval_status_3 == "Approved" ){
+                  status="Added into Blockchain";
+                }
+                else if(record.approval_status_1 == "Approved" || record.approval_status_2 == "Approved"
+                   || record.approval_status_3 == "Approved")
+                {
+                  status="Processing";
+                }
+                return status;
+            }
+            function fxsubmit(){
+              $("#approveForm").submit();
+            }
+       </script>
 {% endblock content %}

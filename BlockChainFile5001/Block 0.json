@@ -1,8 +1,15 @@
 {
       "index": 0,
-      "OrganOwner": "0",
-      "OrganName": "0",
-      "timestamp": 0,
+      "donor": "0",
+      "organ_name": "0",
+      "blood_type": "0",
+      "height": 0,
+      "weight": 0,
+      "age": 0,
+      "hla_group": "0",
+      "timestamp": "0",
+      "update_from_block": "0",
       "previous_hash": "0",
+      "status": "0",
       "nonce": 0
 }

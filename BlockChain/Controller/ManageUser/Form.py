@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flask_login import current_user
 from BlockChain.models import User
@@ -31,7 +31,6 @@ class LoginForm(FlaskForm):
     email = StringField('E-mail',
                         validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
-    remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
 
 
@@ -43,6 +42,8 @@ class UpdateAccountForm(FlaskForm):
     picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     job_title = StringField('Job title', validators=[DataRequired(), Length(max=20)])
     phone_num = StringField('Phone Number', validators=[DataRequired(), Length(max=11)])
+    address = StringField('Address', validators=[Length(max=100)])
+    gender = SelectField("Gender", choices=[('Male', 'Male'), ('Female', 'Female')])
     submit = SubmitField('Update')
 
     def validate_username(self, username):
@@ -57,8 +58,6 @@ class UpdateAccountForm(FlaskForm):
             if user:
                 raise ValidationError('The E-mail Has Been Occupied')
 
-class edit_profileForm(FlaskForm):
-    submit = SubmitField('edit')
 
 class changePasswordForm(FlaskForm):
     password = PasswordField('New Password', validators=[DataRequired()])
