@@ -1,8 +1,15 @@
 {
       "index": 5,
-      "OrganOwner": "abolo",
-      "OrganName": "skin",
-      "timestamp": "2020-11-14T22:23:14.459635",
-      "previous_hash": "11b7da3bf05e1a5c05e5c40e4d8aa27def2484260a8e53a65a84d1d4161af9c5",
-      "nonce": 355
+      "donor": "Siri",
+      "organ_name": "Liver",
+      "blood_type": "A",
+      "height": 170.0,
+      "weight": 55.0,
+      "age": 22,
+      "hla_group": "HLA-DQA1",
+      "timestamp": "2020-11-26T17:34:06.211569",
+      "update_from_block": 0,
+      "previous_hash": "06bba739fa84afe4d1859483b60037e1ac5405dfb93e2943a0b5c405f1113b42",
+      "status": "Available",
+      "nonce": 76
 }

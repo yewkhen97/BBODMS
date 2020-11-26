@@ -1,8 +1,9 @@
 from flask import render_template,  Blueprint, request, jsonify
+from flask_login import login_required
 from BlockChain.Model.ViewBlockModel.ViewBlockModel import (get_chain, register_peer, get_node,
                                                             sync_new_block,set_session,
-                                                            save_broadcast_node, is_conflict, resolve_conflict)
-from BlockChain.Controller.ViewBlock.Form import BlockForm
+                                                            save_broadcast_node, is_conflict, resolve_conflict
+                                                            )
 
 BlockRoute = Blueprint('BlockRoute', __name__)
 
@@ -21,28 +22,17 @@ def retrieve_chain():
     dict_chain = [block.__dict__.copy() for block in local_chain]
     return jsonify(dict_chain), 200
 
-@BlockRoute.route("/block_details", methods=['POST'])
-def block_details():
 
-    block_index = request.form.get("block_id", "")
-    print("Block passed:", block_index)
-    chain=get_chain()
-    for list in chain:
-        if list.index == block_index:
-            details = list
-            break
-    return render_template('ViewBlock/block_details.html')
-
-@BlockRoute.route("/block_<int:block_id>/details")
-def search(self, key):
-        newlist=[]
-        chain = get_chain()
-        for a in chain:
-            print(a.index)
-            if a.OrganName == key:
-                newlist.append(a)
-        for i in newlist:
-            print(i.OrganName)
+@BlockRoute.route("/update_block", methods=["GET", "POST"])
+@login_required
+def update_block():
+    block_index = int(request.form["block_index"])
+    chain = get_chain()
+    for block in chain:
+        if block.index == block_index:
+            target_block = block
+            print("update block:", target_block)
+    return render_template('ViewBlock/request_update.html', block=target_block)
 
 
 @BlockRoute.route('/add_node', methods=['POST'])
@@ -68,6 +58,7 @@ def register_node():
     }
     print("All node in blockchain:", response['all_peer_node'])
     return jsonify(response), 201
+
 
 @BlockRoute.route('/nodes', methods=['GET'])
 def get_all_node():

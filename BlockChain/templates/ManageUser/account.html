@@ -1,7 +1,29 @@
 {% extends "layout.html" %}
 {% block content %}
-  <div class="container emp-profile">
-              <form method="post">
+{% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                          {% for category, message in messages %}
+                      <div class="alert alert-{{ category }}" role="alert">
+                          <div class="container">
+                            <strong>{{ message }}</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">
+                               <i class="now-ui-icons">&times;</i>
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                        {% endfor%}
+                        {% endif %}
+                      {% endwith %}
+  <div class="wrapper">
+      <div class="page-header clear-filter" filter-color="red">
+          <div class="page-header-image" data-parallax="true" style="background-image:url('../static/assets/img/header.jpg');">
+          </div>
+        <div class="container">
+          <div class="card">
+            <div class="card-body">
+              <div class="container emp-profile">
                   <div class="row">
                       <div class="col-md-4">
                           <div class="profile-img">
@@ -10,22 +32,26 @@
                       </div>
                       {% if account %}
                                   {% if account != current_user %}
-                                  <div class="col-md-6">
-                                      <div class="profile-head">
-                                          <h5>
-                                             {{ account.username }}
-                                          </h5>
-                                           <h6>
-                                              {{ account.job_title }}
-                                          </h6>
-                                          <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                              <li class="nav-item">
-                                                   <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
-                                              </li>
-                                          </ul>
-                                        </div>
-                                   </div>
-                                   </div>
+                                   <div class="col-md-6">
+                                    <div class="profile-head">
+                                      <div class="col-md-6">
+                                        <h4>
+                                           {{ account.username }}
+                                        </h4>
+                                      </div>
+                                      <div class="col-md-3">
+                                         <h5>
+                                            {{ account.job_title }}
+                                        </h5>
+                                      </div>
+                                      <div class="col-md-3">
+                                        <span class="badge badge-default">About</span>
+                                      </div>
+                                    </div>
+                                 </div>
+                                </div>
+                              </div>
+                           <hr>
                                     <div class="row">
                                       <div class="col-md-4"> 
                                       </div>
@@ -34,10 +60,18 @@
                                               <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                                                 <div class="row">
                                                   <div class="col-md-6">
-                                                      <label>Name</label>
+                                                      <label class="badge badge-default">Name</label>
                                                   </div>
                                                   <div class="col-md-6">
                                                       <p>{{ account.username }}</p>
+                                                  </div>
+                                              </div>
+                                              <div class="row">
+                                                   <div class="col-md-6">
+                                                      <label>Gender</label>
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                      <p>{{ account.gender }}</p>
                                                   </div>
                                               </div>
                                               <div class="row">
@@ -56,6 +90,15 @@
                                                       <p>{{ account.phone_num }}</p>
                                                   </div>
                                               </div>
+                                              <div class="row">
+                                                   <div class="col-md-6">
+                                                      <label>Address</label>
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                      <p>{{ account.address }}</p>
+                                                  </div>
+                                              </div>
+                                              
                                             </div>
                                           </div>
                                       </div>
@@ -64,59 +107,90 @@
                       {% else %}
                     <div class="col-md-6">
                         <div class="profile-head">
-                            <h5>
+                          <div class="col-md-4">
+                            <h4>
                                {{ current_user.username }}
-                            </h5>
-                             <h6>
+                            </h4>
+                          </div>
+                            <div class="col-md-3">
+                             <h5>
                                 {{ current_user.job_title }}
-                            </h6>
+                            </h5>
+                          </div>
                             <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item">
-                                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+                                     <a class="btn btn-info " href="/change_password">Change Password</a>
+                                </li>
+                                 <li class="nav-item">
+                                    <a class="btn btn-info " href="/update_account" >Edit Profile</a>
                                 </li>
                             </ul>
+                            <div class="col-md-3">
+                            <span class="badge badge-default">About</span>
                           </div>
+                        </div>
                      </div>
-                      <div class="col-md-2">
-                        <form method="post">
-                          {{ form.submit(class="profile-edit-btn", value="Edit") }}  
-                        </form>
-                      </div>
                     </div>
+                    <hr>
                     <div class="row">
-                      <div class="col-md-4"> 
-                      </div>
-                      <div class="col-md-8">
-                          <div class="tab-content profile-tab" id="myTabContent">
-                              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">            <div class="row">
-                                              <div class="col-md-6">
-                                                  <label>Name</label>
+                                      <div class="col-md-3"> 
+                                      </div>
+                                      <div class="col-md-8">
+                                          <div class="tab-content profile-tab" id="myTabContent">
+                                              <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                                <div class="row">
+                                                  <div class="col-md-6">
+                                                     <p>Name</p>
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                      <p>{{ current_user.username }}</p>
+                                                  </div>
                                               </div>
-                                              <div class="col-md-6">
-                                                  <p>{{ current_user.username }}</p>
+                                              <div class="row">
+                                                   <div class="col-md-6">
+                                                      <p>Gender</p>
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                      <p>{{ current_user.gender }}</p>
+                                                  </div>
                                               </div>
+                                              <div class="row">
+                                                  <div class="col-md-6">
+                                                      <p>Email</p>
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                      <p>{{ current_user.email }}</p>
+                                                  </div>
+                                              </div>
+                                              <div class="row">
+                                                   <div class="col-md-6">
+                                                      <p>Phone</p>
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                      <p>{{ current_user.phone_num }}</p>
+                                                  </div>
+                                              </div>
+                                              <div class="row">
+                                                   <div class="col-md-6">
+                                                      <p>Address</p>
+                                                  </div>
+                                                  <div class="col-md-6">
+                                                      <p>{{ current_user.address }}</p>
+                                                  </div>
+                                              </div>
+                                              
+                                            </div>
                                           </div>
-                                          <div class="row">
-                                              <div class="col-md-6">
-                                                  <label>Email</label>
-                                              </div>
-                                              <div class="col-md-6">
-                                                  <p>{{ current_user.email }}</p>
-                                              </div>
-                                          </div>
-                                          <div class="row">
-                                              <div class="col-md-6">
-                                                  <label>Phone</label>
-                                              </div>
-                                              <div class="col-md-6">
-                                                  <p>{{ current_user.phone_num }}</p>
-                                              </div>
-                                          </div>
-                                  </div>
-                               </div>
-                          </div>
-                      </div>                                                  
-                      {% endif %}
-              </form>           
+                                      </div>
+                                  </div>                                                  
+                      {% endif %}          
           </div>
+        </div>
+</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+            
 {% endblock content %}

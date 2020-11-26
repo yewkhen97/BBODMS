@@ -1,8 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="wrapper">
+<div class="page-header clear-filter" filter-color="red">
+      <div class="page-header-image" data-parallax="true" style="background-image:url('../static/assets/img/header.jpg');">
+      </div>
 <div class="col-md-6 ml-auto col-md-7 mr-auto">
                 <div class="input-group">
-                    <input class="form-control" id="block-search" name="q" placeholder="Search by Organ Name" autocomplete="false" required>
+                    <input class="form-control" id="block-search" name="q" placeholder="Type anything to search" autocomplete="false" required>
                 </div>
         </div>
     <div class="col-md-6 ml-auto col-md-7 mr-auto">
@@ -24,9 +28,39 @@
       </div>
       </div>
     </div>
+  </div>
+</div>
 
+<!-- Start Modal -->
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header justify-content-center">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+              <i class="now-ui-icons ui-1_simple-remove"></i>
+            </button>
+            <h4 class="title title-up" id="modalTitle"></h4>
+          </div>
+          <div class="modal-body">
+             <div class="col-md-10 offset-md-2">
+            <table id="modalTable">
+              
+            </table>
+          </div>
+          </div>
+          <div class="modal-footer" id="btnSection">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  End Modal -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" crossorigin="anonymous"></script>
           <script>
+            var data;
+            if(data!=null)
+              data = null;
             const tbodyEl = document.getElementById("tbodyhome");
             $(document).ready(function(){
                   var current_ip = String(window.location.host);
@@ -45,42 +79,41 @@
                   });
                 });
             $(document).ready(function(){
+                    data = [];
                     $.ajax({
                     type: "GET",
                     url: "{{ url_for('BlockRoute.retrieve_chain') }}",
                     success: function(response){
                       console.log(response);
-                      var data = response;
+                      data = response;
                       data.reverse();
                       tbodyEl.innerHTML="";
                     for(var counter=0; counter<data.length-1; counter++){
-                      var hash_string = data[counter].previous_hash;
-                      var show_hash = hash_string.substring(0, 20);
-                      show_hash = show_hash.concat("...");
-                      var datetime = new Date(data[counter].timestamp)
-                      var formatedDate = datetime.toLocaleDateString('en-GB', {
-                                          day: 'numeric', month: 'short', year: 'numeric'
-                                        }).replace(/ /g, '-');
+                      var previous_hash = cut_hash(data[counter].previous_hash);
+                      var formatedDate = formatDate(data[counter].timestamp);
                       tbodyEl.innerHTML += `
-                          <form method="POST" class="blockform" action="{{url_for('BlockRoute.block_details')}}">
-                          <tr class="home_table_row" onclick="submitform()">
-                              <input  type="hidden" name="block_id" value="${data[counter].index}"/>
-                          </form>
+                          <tr class="home_table_row" data-toggle="modal" data-target="#myModal" onclick="to_block_details(${data[counter].index})">
                               <td>${data[counter].index}</td>
-                              <td><div class="tooltips">${show_hash}<span id="tooltiptext">${data[counter].previous_hash}</span></div></td>
-                              <td>${data[counter].OrganName}</td>
+                              <td><div class="tooltips">${previous_hash}</div></td>
+                              <td>${data[counter].organ_name}</td>
                               <td>${formatedDate}</td>
                           </tr>
-                         
                       `;
                       }
+
                     },
                     error: function(response){
                       console.log(response);
                     }
                   });
                 });
-
+            function formatDate(date){
+                var datetime = new Date(date);
+                dateStr = datetime.toLocaleDateString('en-GB', {
+                                          day: 'numeric', month: 'short', year: 'numeric'
+                                        }).replace(/ /g, '-');
+                return dateStr;
+            }
             $(document).ready(function(){
               $("#block-search").on("keyup", function() {
                 var value = $(this).val().toLowerCase();
@@ -89,9 +122,77 @@
                 });
               });
             });
-            function submitform(){
-              $(".blockform").submit(); // Submit the form
+            function to_block_details(index){         
+                var printTable = document.getElementById("modalTable");
+                var printTitle = document.getElementById("modalTitle");
+                var printBtn = document.getElementById("btnSection");
+                var block = find_block(index);
+                var previous_hash = cut_hash(block.previous_hash);
+                var formatedDate = formatDate(block.timestamp);
+                printTitle.innerHTML = "Detail of Block: "+block.index;
+                printTable.innerHTML = `
+                <tr> <td>Hash: </td>
+                     <td> <div class="tooltips">${previous_hash}<span class="tooltiptext">${block.previous_hash}</span></div></td>
+                </tr>
+                <tr> <td>Donor Name: </td>
+                     <td> ${block.donor}</td>
+                </tr>
+                <tr> <td>Donor Age: </td>
+                     <td> ${block.age}</td>
+                </tr>
+                <tr> <td>Organ: </td>
+                     <td>${block.organ_name}</td>
+                </tr>
+                <tr> <td>Blood Type: </td>
+                     <td> ${block.blood_type}</td>
+                </tr>
+                <tr> <td>Height: </td>
+                     <td> ${block.height}</td>
+                </tr>
+                <tr> <td>Weight: </td>
+                     <td> ${block.weight}</td>
+                </tr>
+                <tr> <td>HLA Group: </td>
+                     <td> ${block.hla_group}</td>
+                </tr>
+                <tr> <td>Approve Date: </td>
+                     <td> ${formatedDate}</td>
+                </tr>
+                <tr id="blockPointer"> <td>Updated from Block: </td>
+                     <td> ${block.update_from_block}</td>
+                </tr>
+                <tr> <td>Donation Status: </td>
+                     <td>${block.status}</td>
+                </tr>
+                
+                `;
+                if(block.status == "Available"){
+                  $("#blockPointer").hide();
+                }
+
+                printBtn.innerHTML = `<form id="requestForm" action="/update_block" method="POST"><button id="btnRequest" onclick="request_update()" class="btn btn-default">Request For Transplantation</button>
+                <input type="hidden" name="block_index" value="${index}"></form>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>`;
+              
+            }
+            function cut_hash(hash){
+
+              var show_hash = hash.substring(0, 25);
+              show_hash = show_hash.concat("...");
+              return show_hash;
             }
 
+            function request_update(){
+                $("#requestForm").submit();
+            }
+
+            function find_block(index){
+              for(var counter=0; counter<data.length-1; counter++){
+                  if(data[counter].index==index){
+                        var block = data[counter];
+                        return block;
+                  }
+                }
+            }
        </script>
 {% endblock content %}

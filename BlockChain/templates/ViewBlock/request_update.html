@@ -12,38 +12,8 @@
                   
   <div class="col-sm-3"><!--left col-->
     <form class="form" action="" method="POST" id="registrationForm" enctype="multipart/form-data">
-
-      <div class="text-center">
         {{ form.csrf_token }}
-        <img src="{{ image_file }}" class="avatar img-circle img-thumbnail" alt="avatar">
-        <div class="form-group">
-        <label class="btn btn-info">Change Picture</label>
-                    {{ form.picture(class="btn btn-info") }}
-                    {% if form.picture.errors %}
-                        {% for error in form.picture.errors %}
-                            <div class="alert alert-danger" role="alert">
-                          <div class="container">
-                            <div class="alert-icon">
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" 
-                                class="bi bi-exclamation-circle" fill="currentColor"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 
-                                1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905
-                                 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
-                            </svg>
-                            </div>
-                            <strong>{{ error }}</strong>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                              <span aria-hidden="true">
-                               <i class="now-ui-icons">&times;</i>
-                              </span>
-                            </button>
-                          </div>
-                        </div>
-                        {% endfor %}
-                    {% endif %}
-      </div></div></hr><br>
+        </hr><br>
        </div><!--/col-3-->
         <div class="col-sm-9">         
           <div class="tab-content">

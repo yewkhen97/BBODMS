@@ -8,16 +8,25 @@ import os
 
 
 class Block:
-    def __init__(self, index, OrganOwner, OrganName, timestamp, previous_hash, nonce):
+    def __init__(self, index, donor, organ_name, blood_type, height, weight, age, hla_group,
+                 update_from_block, timestamp, previous_hash, status,nonce):
         self.index = index
-        self.OrganOwner = OrganOwner
-        self.OrganName = OrganName
+        self.donor = donor
+        self.organ_name = organ_name
+        self.blood_type = blood_type
+        self.height = height
+        self.weight = weight
+        self.age = age
+        self.hla_group = hla_group
         self.timestamp = timestamp
+        self.update_from_block = update_from_block
         self.previous_hash = previous_hash
+        self.status = status
         self.nonce = nonce
 
     def __str__(self):
         return str(self.__dict__)
+
 
 class BlockChain:
     difficulty = 2
@@ -37,7 +46,7 @@ class BlockChain:
         self.__chain = val
 
     def genesis_block(self):
-        genesis_block = Block(0, "0","0", 0, "0",0)
+        genesis_block = Block(0, "0", "0", "0", 0, 0, 0, "0", "0", "0", "0", "0", 0)
         self.add_block(genesis_block)
 
     def add_block(self, block):
@@ -47,10 +56,17 @@ class BlockChain:
         """
         newBlock = {
             "index": block.index,
-            "OrganOwner": block.OrganOwner,
-            "OrganName": block.OrganName,
+            "donor": block.donor,
+            "organ_name": block.organ_name,
+            "blood_type": block.blood_type,
+            "height": block.height,
+            "weight": block.weight,
+            "age": block.age,
+            "hla_group": block.hla_group,
             "timestamp": block.timestamp,
+            "update_from_block": block.update_from_block,
             "previous_hash": block.previous_hash,
+            "status": block.status,
             "nonce": block.nonce
         }
         _string_host, string_port = str(self.host_node).split(":")
@@ -108,8 +124,10 @@ class BlockChain:
         hash_match = compute_hash(self.__chain[-1]) == block['previous_hash']
         if not proof_is_valid or not hash_match:
             return False
-        converted_block = Block(block['index'], block['OrganOwner'], block['OrganName'],
-                                block['timestamp'],block['previous_hash'],block['nonce'])
+        converted_block = Block(block['index'], block['donor'], block['organ_name'],block['blood_type'],
+                                block['height'], block['weight'], block['age'], block['hla_group'],
+                                block['update_from_block'],block['timestamp'], block['previous_hash'], block['status']
+                                , block['nonce'])
         self.__chain.append(converted_block)
         self.add_block(converted_block)
         return True
@@ -128,12 +146,25 @@ class BlockChain:
         timeNow = datetime.now(timezone)
         timeNow = timeNow.strftime('%Y-%m-%dT%H:%M:%S.%f')
         new_index += 1
+        if donation.update_block:
+            old_index = donation.block_index
+            status = "Not Available"
+        else:
+            old_index = 0
+            status = "Available"
         new_block = Block(
                          index=new_index,
-                         OrganOwner=donation.OrganOwner,
-                         OrganName=donation.OrganName,
+                         donor=donation.donor,
+                         organ_name=donation.organ_name,
+                         blood_type=donation.blood_type,
+                         height=donation.height,
+                         weight=donation.weight,
+                         age=donation.age,
+                         hla_group=donation.hla_group,
                          timestamp=timeNow,
+                         update_from_block=old_index,
                          previous_hash=hashed_block,
+                         status=status,
                          nonce=proof
                           )
         self.__chain.append(new_block)
@@ -164,8 +195,10 @@ class BlockChain:
             try:
                 response = requests.get(url)
                 node_chain = response.json()
-                node_chain = [Block(block['index'], block['OrganOwner'], block['OrganName'],
-                            block['timestamp'],block['previous_hash'],block['nonce']) for block in node_chain]
+                node_chain = [Block(block['index'], block['donor'], block['organ_name'],block['blood_type'],
+                                    block['height'],block['weight'], block['age'], block['hla_group'],
+                                    block['update_from_block'], block['timestamp'], block['previous_hash'],
+                                    block['status'], block['nonce']) for block in node_chain]
                 node_chain_length = len(node_chain)
                 count = 0
                 for block in node_chain:
