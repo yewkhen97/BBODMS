@@ -65,6 +65,12 @@
               <a class="nav-link" href="/">
                 <p>Home</p>
               </a>
+                </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="consensus">
+                <p>Synchronize Chain</p>
+              </a>
             </li>
               {% if current_user.is_authenticated %}
 
@@ -146,4 +152,25 @@
   <script src="../static/assets/js/core/jquery.min.js" type="text/javascript"></script>
   <script src="../static/assets/js/core/popper.min.js" type="text/javascript"></script>
   <script src="../static/assets/js/core/bootstrap.min.js" type="text/javascript"></script>
+  <script>
+    $(document).ready(function() {
+      $("#consensus").click(function(){
+        var current_ip = String(window.location.host);
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for('BlockRoute.verify_node') }}",
+            contentType: "application/json",
+            data: JSON.stringify({'node': current_ip}),
+            dataType: "json",
+            success: function(response){
+                  alert(response.message);
+                 window.location = "/home";
+            },
+            error: function(response){
+                 alert(response.message);
+          }
+        });
+      });
+    });
+  </script>
 </html>

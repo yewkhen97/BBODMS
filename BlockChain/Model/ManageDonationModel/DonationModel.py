@@ -1,6 +1,7 @@
 from BlockChain import db
-from BlockChain.models import Donation
+from BlockChain.models import Donation, Node
 from BlockChain.blockchain import *
+from BlockChain.Model.ViewBlockModel.ViewBlockModel import get_peer
 from flask_login import current_user
 from flask import session
 
@@ -62,7 +63,7 @@ def retrieve_confirmed_donation():
                                             approval_status_3='Approved').first()
     new_mine = BlockChain(session['current_node'])
     new_mine.chain_retrive()
-    new_mine.load_node()
+    get_peer()
     if new_mine.mine(new_donation):
         if new_mine.resolve_conflict:
             return False

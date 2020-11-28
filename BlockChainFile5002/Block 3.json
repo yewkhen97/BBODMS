@@ -1,0 +1,15 @@
+{
+      "index": 3,
+      "donor": "Justice",
+      "organ_name": "Kidney",
+      "blood_type": "O",
+      "height": 165.0,
+      "weight": 55.0,
+      "age": 32,
+      "hla_group": "HLA-DRA1",
+      "timestamp": "2020-11-26T17:20:58.717111",
+      "update_from_block": 0,
+      "previous_hash": "9ec6143c67c94251cdf471a1378128f993fe9980d8f2ed880bbcf3cc6119c154",
+      "status": "Available",
+      "nonce": 162
+}

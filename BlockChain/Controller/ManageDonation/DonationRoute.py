@@ -40,6 +40,7 @@ def new_donation():
 def view_pending_list():
     return render_template('ManageDonation/pending_list.html')
 
+
 @ManageDonation.route("/load_pending_list", methods=['GET', 'POST'])
 @login_required
 def load_pending_list():

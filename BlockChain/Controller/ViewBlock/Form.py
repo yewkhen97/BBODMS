@@ -3,7 +3,7 @@ from wtforms import StringField, SubmitField, IntegerField, FloatField, BooleanF
 from wtforms.validators import DataRequired
 
 
-class DonationForm(FlaskForm):
+class UpdateForm(FlaskForm):
     organ_name = StringField("Organ Name: ", validators=[DataRequired()])
     donor = StringField("Donor: ", validators=[DataRequired()])
     age = IntegerField("Donor Age: ", validators=[DataRequired()])

@@ -74,3 +74,19 @@ class Donation(db.Model, Serializer):
                 'block_index': self.block_index, 'update_block': self.update_block,
                 'applier_details': self.applier_details, 'user_id': self.user_id }
 
+
+class Node(db.Model):
+    node_address = db.Column(db.String, primary_key=True)
+
+    @property
+    def serializable(self):
+        return {'node_address': self.node_address}
+
+    @classmethod
+    def get_or_create(cls, node):
+        exists = db.session.query(Node.node_address).filter_by(node_address=node).scalar() is not None
+        if exists:
+            return db.session.query(Node.node_address).filter_by(node_address=node).first()
+        return cls(node_address=node)
+
+

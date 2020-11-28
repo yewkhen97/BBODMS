@@ -83,11 +83,13 @@ def update_account():
     image_file = url_for('static', filename='profile_picture/' + current_user.image_file)
     return render_template('ManageUser/updateAccount.html', title='Account', image_file=image_file, form=form)
 
+
 @users.route("/account/<int:account_id>")
 def view_account(account_id):
     account = get_account_details(account_id)
     image_file = url_for('static', filename='profile_picture/' + account.image_file)
     return render_template('ManageUser/account.html', title='Account', image_file=image_file, account=account)
+
 
 @users.route("/change_password", methods=['GET', 'POST'])
 @login_required
@@ -98,4 +100,5 @@ def change_password():
         flash('Your Password has been changed!', 'success')
         return redirect(url_for('users.account'))
 
-    return render_template('ManageUser/change_password.html', title='Change Password', form=form, legend="Update Password")
+    return render_template('ManageUser/change_password.html', title='Change Password', form=form,
+                           legend="Update Password")

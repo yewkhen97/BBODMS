@@ -4,7 +4,7 @@
 <div class="page-header clear-filter" filter-color="red">
       <div class="page-header-image" data-parallax="true" style="background-image:url('../static/assets/img/header.jpg');">
       </div>
-<div class="col-md-6 ml-auto col-md-7 mr-auto">
+      <div class="col-md-6 ml-auto col-md-7 mr-auto">
                 <div class="input-group">
                     <input class="form-control" id="block-search" name="q" placeholder="Type anything to search" autocomplete="false" required>
                 </div>
@@ -43,7 +43,7 @@
             <h4 class="title title-up" id="modalTitle"></h4>
           </div>
           <div class="modal-body">
-             <div class="col-md-10 offset-md-2">
+             <div class="col-md-11 offset-md-2">
             <table id="modalTable">
               
             </table>
@@ -64,25 +64,13 @@
             const tbodyEl = document.getElementById("tbodyhome");
             $(document).ready(function(){
                   var current_ip = String(window.location.host);
+                  data = [];
                     $.ajax({
                     type: "POST",
-                    url: "{{ url_for('BlockRoute.show_current_ip') }}",
+                    url: "{{ url_for('BlockRoute.set_current_session') }}",
                     contentType: "application/json",
                     data: JSON.stringify({'node': current_ip}),
                     dataType: "json",
-                    success: function(response){
-                      console.log(response);
-                    },
-                    error: function(response){
-                      console.log(response);
-                    }
-                  });
-                });
-            $(document).ready(function(){
-                    data = [];
-                    $.ajax({
-                    type: "GET",
-                    url: "{{ url_for('BlockRoute.retrieve_chain') }}",
                     success: function(response){
                       console.log(response);
                       data = response;
@@ -100,7 +88,6 @@
                           </tr>
                       `;
                       }
-
                     },
                     error: function(response){
                       console.log(response);
@@ -131,6 +118,9 @@
                 var formatedDate = formatDate(block.timestamp);
                 printTitle.innerHTML = "Detail of Block: "+block.index;
                 printTable.innerHTML = `
+                <tr id="blockPointer"> <td>Updated from Block: </td>
+                     <td> ${block.update_from_block}</td>
+                </tr>
                 <tr> <td>Hash: </td>
                      <td> <div class="tooltips">${previous_hash}<span class="tooltiptext">${block.previous_hash}</span></div></td>
                 </tr>
@@ -158,21 +148,23 @@
                 <tr> <td>Approve Date: </td>
                      <td> ${formatedDate}</td>
                 </tr>
-                <tr id="blockPointer"> <td>Updated from Block: </td>
-                     <td> ${block.update_from_block}</td>
-                </tr>
+                
                 <tr> <td>Donation Status: </td>
                      <td>${block.status}</td>
                 </tr>
                 
                 `;
-                if(block.status == "Available"){
-                  $("#blockPointer").hide();
-                }
+                
 
                 printBtn.innerHTML = `<form id="requestForm" action="/update_block" method="POST"><button id="btnRequest" onclick="request_update()" class="btn btn-default">Request For Transplantation</button>
                 <input type="hidden" name="block_index" value="${index}"></form>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>`;
+                if(block.status == "Available"){
+                  $("#blockPointer").hide();
+                }
+                if(block.status == "Not Available"){
+                  $("#btnRequest").hide();
+                }
               
             }
             function cut_hash(hash){
@@ -188,7 +180,11 @@
 
             function find_block(index){
               for(var counter=0; counter<data.length-1; counter++){
-                  if(data[counter].index==index){
+                  if(data[counter].update_from_block==index){
+                        var block = data[counter];
+                        return block;
+                  }
+                  else if(data[counter].index==index){
                         var block = data[counter];
                         return block;
                   }
