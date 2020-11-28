@@ -6,8 +6,6 @@ from BlockChain.Model.ManageDonationModel.DonationModel import (set_donation, ge
                                                                 set_approve_status,get_donation_list,
                                                                 retrieve_confirmed_donation, mine_new_block)
 
-
-
 ManageDonation = Blueprint('ManageDonation', __name__)
 
 
@@ -57,24 +55,4 @@ def set_approval():
     return render_template('ManageDonation/pending_list.html')
 
 
-@ManageDonation.route("/mine_block")
-def mine_block():
-    if not mine_new_block():
-        response = {"message": "Resolve Conflicts first"}
-        print("resolve conflict")
-        return jsonify(response), 409
-    response = {"message": "All work well"}
-    return jsonify(response), 200
 
-
-@ManageDonation.route("/test")
-def debug():
-    if mine_new_block():
-        response={
-            "message": "OK"
-        }
-    else:
-        response = {
-            "message": "Error"
-        }
-    return jsonify(response), 200

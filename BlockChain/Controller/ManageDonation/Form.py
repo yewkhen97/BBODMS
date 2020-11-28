@@ -24,7 +24,6 @@ class DonationForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
-
 class approvalForm(FlaskForm):
     selection = [('Rejected', 'Reject'), ('Approved', 'Approve'), ('Pending', 'Pending')]
     approval_status = SelectField('Approval', choices=selection)
