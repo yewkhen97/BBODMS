@@ -215,7 +215,7 @@
                 <div class="form-group">
                 <h4>{{ form.hla_group.label() }}</h4>
                 {% if form.hla_group.errors %}
-                    {{ form.height(class="form-control form-control-lg is-invalid") }}
+                    {{ form.hla_group(class="form-control form-control-lg is-invalid") }}
                         {% for error in form.hla_group.errors %}
                         <div class="alert alert-danger" role="alert">
                           <div class="container">
@@ -239,12 +239,12 @@
                         </div>
                         {% endfor %}
                 {% else %}
-                    {{ form.hla_group(class="form-control form-control-lg") }}
+                    {{ form.hla_group(class="form-control form-control-lg", id="hla_group") }}
                 {% endif %}
                 </div>
             </div>
             <div class="col-sm-5"> 
-              <div class="form-group">
+              <div class="form-group" id="other">
                 <h4>{{ form.other_hla_group.label() }}</h4>
                 {% if form.other_hla_group.errors %}
                     {{ form.height(class="form-control form-control-lg is-invalid") }}
@@ -299,5 +299,19 @@
      </div>
     </div>
 </div>
-    
+    <script>
+      $(document).ready(function(){
+         $("#other").hide();
+        $("#hla_group").on("change", function(){
+          if ( this.value == 'other')
+          {
+            $("#other").show();
+          }
+          else
+          {
+            $("#other").hide();
+          }
+        })
+      });
+    </script>
 {% endblock content %}

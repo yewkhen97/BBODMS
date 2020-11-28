@@ -1,7 +1,6 @@
 from BlockChain import db
 from BlockChain.models import Donation, Node
 from BlockChain.blockchain import *
-from BlockChain.Model.ViewBlockModel.ViewBlockModel import get_peer
 from flask_login import current_user
 from flask import session
 
@@ -63,7 +62,9 @@ def retrieve_confirmed_donation():
                                             approval_status_3='Approved').first()
     new_mine = BlockChain(session['current_node'])
     new_mine.chain_retrive()
-    get_peer()
+    node_list = get_peer()
+    for node in node_list:
+        new_mine.peer.add(node['node_address'])
     if new_mine.mine(new_donation):
         if new_mine.resolve_conflict:
             return False
@@ -101,3 +102,8 @@ def mine_new_block():
             donation.approval_status_3 = 'Approved'
     db.session.commit()
     return True
+
+def get_peer():
+    all_node = Node.query.all()
+    node_list = [d.serializable for d in all_node]
+    return node_list

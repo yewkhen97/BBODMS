@@ -47,16 +47,10 @@ def set_update_block():
     applier_details = request.form.get('applier_details')
     update_block = True
 
-    if set_request_block(index, donor, organ_name, age, weight, height, hla_group, blood_type, applier_details,
-                         update_block):
-        response={
-            "message": "OK"
-        }
-    else:
-        response = {
-            "message": "something wrong"
-        }
-    return jsonify(response), 200
+    set_request_block(index, donor, organ_name, age, weight, height, hla_group, blood_type, applier_details,
+                      update_block)
+
+    return render_template('ViewBlock/home.html')
 
 
 @BlockRoute.route('/add_node', methods=['POST'])

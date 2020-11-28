@@ -72,6 +72,7 @@ def set_request_block(index, donor, organ_name, age, weight, height, hla_group, 
                         update_block=update_block, applier_details=applier_details)
     db.session.add(donation)
     db.session.commit()
+    return True
 
 
 def verify_with_peer(node):
