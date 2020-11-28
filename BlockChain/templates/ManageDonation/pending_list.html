@@ -164,7 +164,14 @@
                      <td>Donation Status: </td>
                      <td>${status}</td>
                 </tr>
-                
+                <tr class="UpdateBlock">
+                     <td>Block Index: </td>
+                     <td>${record.block_index}</td>
+                </tr>
+                <tr class="UpdateBlock">
+                     <td>Applier Details: </td>
+                     <td>${record.applier_details}</td>
+                </tr>
                   <input type="hidden" name="record_id" value="${record.id}"/>
                  <tr>
                     <td>Set Approve Status: </td>
@@ -179,6 +186,9 @@
                  </tr> 
 
                 `;
+                if(record.update_block == false){
+                  $(".UpdateBlock").hide();
+                }
             }
 
             function find_donation_record(index){
@@ -191,8 +201,8 @@
             }
             function check_donation_status(record){
               var status="Pending";
-                if(record.approval_status_1 == "Approved" && record.approval_status_2 == "Approved"
-                   && record.approval_status_3 == "Approved" ){
+                if(record.approval_status_1 == "Added" && record.approval_status_2 == "Added"
+                   && record.approval_status_3 == "Added" ){
                   status="Added into Blockchain";
                 }
                 else if(record.approval_status_1 == "Approved" || record.approval_status_2 == "Approved"

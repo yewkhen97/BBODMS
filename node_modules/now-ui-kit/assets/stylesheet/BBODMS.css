@@ -555,6 +555,9 @@ table{
   width: 0;
 }
 
+#consensus:hover{
+  cursor: pointer;
+}
 /* profile CSS*/
 
 

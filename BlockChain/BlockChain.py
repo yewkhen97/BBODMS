@@ -89,18 +89,16 @@ class BlockChain:
 
         return proof
 
-
-
     #function for chain file validation and hash validation, hash recompute function is missing
     def chain_retrive(self):
 
         _string_host, string_port = str(self.host_node).split(":")
-        file_name='BlockChainFile/Block 0.json'.format(string_port)
+        file_name = 'BlockChainFile{}/Block 0.json'.format(string_port)
 
         if not os.path.isdir('BlockChainFile{}'.format(string_port)):
             os.mkdir('BlockChainFile{}'.format(string_port))
-        if not os.path.isdir(file_name):
-            self.genesis_block()
+            if not os.path.isdir(file_name):
+                self.blockchain_consensus()
 
         chain_list=[]
         path = 'BlockChainFile{}/*.json'.format(string_port)
@@ -179,7 +177,7 @@ class BlockChain:
                     return False
                 if response.status_code == 409:
                     self.resolve_conflict = True
-                    return False
+                    self.blockchain_consensus()
             except requests.exceptions.ConnectionError:
                 continue
         return True
@@ -187,8 +185,6 @@ class BlockChain:
     def blockchain_consensus(self):
         temp_chain = self.chain
         replace = False
-        self.peer.clear()
-        self.load_node()
         for node in self.peer:
             print("Consensus 1")
             url = 'http://{}/chain'.format(node)
@@ -222,48 +218,32 @@ class BlockChain:
         return replace
 
     # Code Section for node
-
-    def add_node(self, nodes, is_received=False):
-        self.load_node()
-        self.peer.add(nodes)
-        self.set_node()
-        if not is_received:
-            for node in self.peer:
-                try:
-                    url = 'http://{}/broadcast_node'.format(node)
-                    response = requests.post(url, json={"nodes": nodes})
-                    if response.status_code == 400 or response.status_code == 500:
-                        print("node broadcast problem")
-                        return False
-                    return True
-                except requests.exceptions.ConnectionError:
-                    continue
-
-    def load_node(self):
-        _string_host, string_port = str(self.host_node).split(":")
-        try:
-            file_name = "BlockChain/peer_node{}.txt".format(string_port)
-            with open(file_name, mode='r') as f:
-                peer = json.loads(f.read())
-                self.peer = set(peer)
-                f.close()
-        except OSError:
-            self.peer = set()
-
-    def set_node(self):
-        _string_host, string_port = str(self.host_node).split(":")
-        file_name = "BlockChain/peer_node{}.txt".format(string_port)
-        with open(file_name, mode='w') as f:
-            peer = json.dumps(list(self.peer))
-            f.write(peer)
-            f.close()
-
-    def remove_node(self, node):
-        self.peer.discard(node)
-        self.set_node()
-
-    def get_node(self):
-        return list(self.peer)[:]
-
     def get_port(self):
         return self.host_node
+
+    def load_dependence_chain(self):
+        temp_chain = self.chain
+        for node in self.peer:
+            print("Dependence 1")
+            url = 'http://{}/chain'.format(node)
+            try:
+                response = requests.get(url)
+                print("Dependence 2")
+                node_chain = response.json()
+                node_chain = [Block(block['index'], block['donor'], block['organ_name'], block['blood_type'],
+                                    block['height'], block['weight'], block['age'], block['hla_group'],
+                                    block['update_from_block'], block['timestamp'], block['previous_hash'],
+                                    block['status'], block['nonce']) for block in node_chain]
+                node_chain_length = len(node_chain)
+                local_chain_length = len(self.__chain)
+                if node_chain_length > local_chain_length and verfication.chain_validation(node_chain):
+                    temp_chain = node_chain
+                    print("Dependence 3")
+            except requests.exceptions.ConnectionError:
+                continue
+        self.chain = temp_chain
+        return self.chain
+
+
+
+

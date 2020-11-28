@@ -4,253 +4,83 @@
     <div class="page-header clear-filter" filter-color="red">
           <div class="page-header-image" data-parallax="true" style="background-image:url('../static/assets/img/header.jpg');">
           </div>
-        <div class="container">
-          <div class="card">
-            <div class="card-body">
-              <div class="container bootstrap snippet">
-    <div class="row">
-                  
-  <div class="col-sm-3"><!--left col-->
-    <form class="form" action="" method="POST" id="registrationForm" enctype="multipart/form-data">
-        {{ form.csrf_token }}
-        </hr><br>
-       </div><!--/col-3-->
-        <div class="col-sm-9">         
-          <div class="tab-content">
-            <div class="tab-pane active" id="home">
-                <hr>
-                <div class="row">
-                  <div class="col-sm-5">
-                      <div class="form-group">
-                          <label for="first_name"><h4>User Name</h4></label>
-                            <div class="col-xs-6">
-                               {% if form.username.errors %}
-                               {{ form.username(class="form-control form-control-lg is-invalid") }}
-                                      {% for error in form.username.errors %}
-                                         <div class="alert alert-danger" role="alert">
-                                          <div class="container">
-                                            <div class="alert-icon">
-                                                <svg width="1em" height="1em" viewBox="0 0 16 16" 
-                                                class="bi bi-exclamation-circle" fill="currentColor"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 
-                                                1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905
-                                                 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
-                                            </svg>
-                                            </div>
-                                            <strong>{{ error }}</strong>
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                              <span aria-hidden="true">
-                                               <i class="now-ui-icons">&times;</i>
-                                              </span>
-                                            </button>
-                                          </div>
-                                        </div>
-                                      {% endfor %}
-                              {% else %}
-                                  {{ form.username(class="form-control form-control-lg", placeholder="User Name") }}
-                              {% endif %}
-                          </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-5">
-                      <div class="form-group">   
-                          <div class="col-xs-6">
-                              <label for="email"><h4>Email</h4></label>
-                              {% if form.email.errors %}
-                                  {{ form.email(class="form-control form-control-lg is-invalid") }}
-                                      {% for error in form.email.errors %}
-                                          <div class="alert alert-danger" role="alert">
-                                            <div class="container">
-                                              <div class="alert-icon">
-                                                  <svg width="1em" height="1em" viewBox="0 0 16 16" 
-                                                  class="bi bi-exclamation-circle" fill="currentColor"
-                                                  xmlns="http://www.w3.org/2000/svg">
-                                                  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 
-                                                  1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                                  <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905
-                                                   0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
-                                              </svg>
-                                              </div>
-                                              <strong>{{ error }}</strong>
-                                              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">
-                                                 <i class="now-ui-icons">&times;</i>
-                                                </span>
-                                              </button>
-                                            </div>
-                                          </div>
-                                      {% endfor %}
-                              {% else %}
-                                  {{ form.email(class="form-control form-control-lg" , readonly=True) }}
-                              {% endif %}
-                          </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-sm-5">
-                      <div class="form-group">
-                          <div class="col-xs-6">
-                             <label for="mobile"><h4>Mobile Number</h4></label>
-                                  {% if form.phone_num.errors %}
-                                      {{ form.phone_num(class="form-control form-control-lg is-invalid") }}
-                                          {% for error in form.phone_num.errors %}
-                                             <div class="alert alert-danger" role="alert">
-                                              <div class="container">
-                                                <div class="alert-icon">
-                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" 
-                                                    class="bi bi-exclamation-circle" fill="currentColor"
-                                                    xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 
-                                                    1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905
-                                                     0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
-                                                </svg>
-                                                </div>
-                                                <strong>{{ error }}</strong>
-                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                  <span aria-hidden="true">
-                                                   <i class="now-ui-icons">&times;</i>
-                                                  </span>
-                                                </button>
-                                              </div>
-                                            </div>
-                                          {% endfor %}
-                                  {% else %}
-                                      {{ form.phone_num(class="form-control form-control-lg", placeholder="Phone Number") }}
-                                  {% endif %}
-                          </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-5">
-                      <div class="form-group">
-                          
-                          <div class="col-xs-6">
-                              <label for="job_title"><h4>Job Title</h4></label>
-                              {% if form.job_title.errors %}
-                                  {{ form.job_title(class="form-control form-control-lg is-invalid") }}
-                                  <div class="alert alert-danger" role="alert">
-                                    <div class="container">
-                                      <div class="alert-icon">
-                                          <svg width="1em" height="1em" viewBox="0 0 16 16" 
-                                          class="bi bi-exclamation-circle" fill="currentColor"
-                                          xmlns="http://www.w3.org/2000/svg">
-                                          <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 
-                                          1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                          <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905
-                                           0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
-                                      </svg>
-                                      </div>
-                                      <strong>{{ error }}</strong>
-                                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">
-                                         <i class="now-ui-icons">&times;</i>
-                                        </span>
-                                      </button>
-                                    </div>
-                                  </div>
-                              {% else %}
-                                  {{ form.job_title(class="form-control form-control-lg", placeholder="job title") }}
-                              {% endif %}
-                          </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                     <div class="col-sm-5">
-                      <div class="form-group">                         
-                          <div class="col-xs-6">
-                              <label for="address"><h4>Address</h4></label>
-                              {% if form.address.errors %}
-                                  {{ form.address(class="form-control form-control-lg is-invalid") }}
-                                  <div class="alert alert-danger" role="alert">
-                                    <div class="container">
-                                      <div class="alert-icon">
-                                          <svg width="1em" height="1em" viewBox="0 0 16 16" 
-                                          class="bi bi-exclamation-circle" fill="currentColor"
-                                          xmlns="http://www.w3.org/2000/svg">
-                                          <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 
-                                          1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                          <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905
-                                           0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
-                                      </svg>
-                                      </div>
-                                      <strong>{{ error }}</strong>
-                                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">
-                                         <i class="now-ui-icons">&times;</i>
-                                        </span>
-                                      </button>
-                                    </div>
-                                  </div>
-                              {% else %}
-                                  {{ form.address(class="form-control form-control-lg", placeholder="Address") }}
-                              {% endif %}
-                          </div>
-                      </div>
-                    </div>
-                    <div class="col-sm-5">
-                      <div class="form-group">                         
-                          <div class="col-xs-6">
-                              <label for="address"><h4>Address</h4></label>
-                              {% if form.gender.errors %}
-                                  {{ form.gender(class="form-control form-control-lg is-invalid") }}
-                                  <div class="alert alert-danger" role="alert">
-                                    <div class="container">
-                                      <div class="alert-icon">
-                                          <svg width="1em" height="1em" viewBox="0 0 16 16" 
-                                          class="bi bi-exclamation-circle" fill="currentColor"
-                                          xmlns="http://www.w3.org/2000/svg">
-                                          <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 
-                                          1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                          <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905
-                                           0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
-                                      </svg>
-                                      </div>
-                                      <strong>{{ error }}</strong>
-                                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">
-                                         <i class="now-ui-icons">&times;</i>
-                                        </span>
-                                      </button>
-                                    </div>
-                                  </div>
-                              {% else %}
-                                  {{ form.gender(class="form-control form-control-lg") }}
-                              {% endif %}
-                          </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-sm-5">
-                    <div class="form-group">
-                           <div class="col-xs-12">
-                                <br>
-                                {{ form.submit(class="btn btn-info") }}
-                                <button class="btn btn-default" type="reset"><i class="glyphicon glyphicon-repeat"></i> Reset</button>
-                                <a class="btn btn-info" href="/account">Back</a>
-                            </div>
-                      </div>
-                    </div>
-                  </div>  
-                </form>
-              
-              <hr>
-              
-             </div><!--/tab-pane-->
-           </div>
-         </div>
-</div>
+
+          	<div class="col-md-3 ml-auto col-md-4 mr-auto">
+                <div class="input-group">
+                    <h3 style="background-color: white">Request For Transplantation</h3>
+                </div>
+            </div>
+            <div class="col-md-6 ml-auto col-md-7 mr-auto">
+	        <div class="container">
+	          <div class="card">
+	            <div class="card-body">
+	              <div class="container bootstrap snippet">
+	              </div>
+	              <hr><br>  
+    				<div class="row">  
+
+    					<div class="col-md-6 ml-auto col-md-7 mr-auto">
+					    <form class="form" action="/set_update_block" method="POST" id="registrationForm">
+        					<input type="hidden" name="index" value="{{ block.index }}" />
+        					<input type="hidden" name="donor" value="{{ block.donor }}" />
+        					<input type="hidden" name="organ_name" value="{{ block.organ_name }}" />
+        					<input type="hidden" name="age" value="{{ block.age }}" />
+        					<input type="hidden" name="weight" value="{{ block.weight }}" />
+        					<input type="hidden" name="height" value="{{ block.height }}" />
+        					<input type="hidden" name="hla_group" value="{{ block.hla_group }}" />
+        					<input type="hidden" name="blood_type" value="{{ block.blood_type }}" />
+					          <div class="tab-content">
+					            <div class="tab-pane active" id="home">
+					                <div class="row">
+					                	
+					                	<table class="table">
+					                		<tr>
+					                			<td>Block Index: </td>
+					                			<td>{{ block.index }}</td>
+					                			<td>Donor: </td>
+					                			<td>{{ block.donor }}</td>
+					                		</tr>
+					                		<tr>
+					                			<td>Organ: </td>
+					                			<td>{{ block.organ_name }}</td>
+					                			<td>Age: </td>
+					                			<td>{{ block.age }}</td>
+					                		</tr>
+					                		<tr>
+					                			<td>Weight: </td>
+					                			<td>{{ block.weight }}</td>
+					                			<td>Height: </td>
+					                			<td>{{ block.height }}</td>
+					                		</tr>
+					                		<tr>
+					                			<td>HLA Group: </td>
+					                			<td>{{ block.hla_group }}</td>
+					                			<td>Blood Type: </td>
+					                			<td>{{ block.blood_type }}</td>
+					                		</tr>
+					                		<tr>
+					                			<td colspan="2">Applier Details</td>
+					                			<td colspan="2"><input type="textarea" class="form-control" rows="4" cols="50" name="applier_details" required></td>
+					                		</tr>
+					                		<tr>
+					                			<td colspan="4"><input type="submit" name="submit"></td>
+					                		</tr>
+					                	</table>
+					                	</div>
+					            	</div> 
+					            </div>
+					        </div>      
+              			</form>
+              		</div>
+              			<hr>
+  		           </div>
+		         </div>
+				</div>
               </div> 
             </div>
-          </div>
-        </div>
+    </div>
+</div>  
 
-         
-</div>
   
 
 
