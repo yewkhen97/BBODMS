@@ -9,7 +9,8 @@ import os
 
 class Block:
     def __init__(self, index, donor, organ_name, blood_type, height, weight, age, hla_group,
-                 update_from_block, timestamp, previous_hash, status,nonce):
+                 update_from_block, approval_date_1, approval_date_2, approval_date_3,
+                 timestamp, previous_hash, status, nonce):
         self.index = index
         self.donor = donor
         self.organ_name = organ_name
@@ -18,6 +19,9 @@ class Block:
         self.weight = weight
         self.age = age
         self.hla_group = hla_group
+        self.approval_date_1 = approval_date_1
+        self.approval_date_2 = approval_date_2
+        self.approval_date_3 = approval_date_3
         self.timestamp = timestamp
         self.update_from_block = update_from_block
         self.previous_hash = previous_hash
@@ -46,7 +50,7 @@ class BlockChain:
         self.__chain = val
 
     def genesis_block(self):
-        genesis_block = Block(0, "0", "0", "0", 0, 0, 0, "0", "0", "0", "0", "0", 0)
+        genesis_block = Block(0, "0", "0", "0", 0, 0, 0, "0", "0", "0", "0", "0", "0", "0", "0", 0)
         self.add_block(genesis_block)
 
     def add_block(self, block):
@@ -54,7 +58,7 @@ class BlockChain:
         function to save the block locally after validation
 
         """
-        newBlock = {
+        new_block = {
             "index": block.index,
             "donor": block.donor,
             "organ_name": block.organ_name,
@@ -63,15 +67,17 @@ class BlockChain:
             "weight": block.weight,
             "age": block.age,
             "hla_group": block.hla_group,
+            "approval_date_1": block.approval_date_1,
+            "approval_date_2": block.approval_date_2,
+            "approval_date_3": block.approval_date_3,
             "timestamp": block.timestamp,
             "update_from_block": block.update_from_block,
             "previous_hash": block.previous_hash,
             "status": block.status,
             "nonce": block.nonce
         }
-        _string_host, string_port = str(self.host_node).split(":")
-        file_name = "BlockChainFile{}/Block {}.json".format(string_port, block.index)
-        next_block = json.dumps(newBlock, indent=6)
+        file_name = "C:BlockChainFile/Block {}.json".format(block.index)
+        next_block = json.dumps(new_block, indent=6)
         with open(file_name, 'w') as f:
             f.write(next_block)
             f.close()
@@ -92,16 +98,16 @@ class BlockChain:
     #function for chain file validation and hash validation, hash recompute function is missing
     def chain_retrive(self):
 
-        _string_host, string_port = str(self.host_node).split(":")
-        file_name = 'BlockChainFile{}/Block 0.json'.format(string_port)
+        file_name = 'C:BlockChainFile/Block 0.json'
 
-        if not os.path.isdir('BlockChainFile{}'.format(string_port)):
-            os.mkdir('BlockChainFile{}'.format(string_port))
+        if not os.path.isdir('C:BlockChainFile'):
+            os.mkdir('C:BlockChainFile')
             if not os.path.isdir(file_name):
+                self.genesis_block()
                 self.blockchain_consensus()
 
         chain_list=[]
-        path = 'BlockChainFile{}/*.json'.format(string_port)
+        path = 'C:BlockChainFile/*.json'
         files = glob.glob(path)
         for name in files:
             with open(name) as f:
@@ -123,9 +129,10 @@ class BlockChain:
         if not proof_is_valid or not hash_match:
             return False
         converted_block = Block(block['index'], block['donor'], block['organ_name'],block['blood_type'],
-                                block['height'], block['weight'], block['age'], block['hla_group'],
-                                block['update_from_block'],block['timestamp'], block['previous_hash'], block['status']
-                                , block['nonce'])
+                                block['height'],block['weight'], block['age'], block['hla_group'],
+                                block['update_from_block'], block['approval_date_1'], block['approval_date_2'],
+                                block['approval_date_3'], block['timestamp'], block['previous_hash'],
+                                block['status'], block['nonce'])
         self.__chain.append(converted_block)
         self.add_block(converted_block)
         return True
@@ -159,6 +166,9 @@ class BlockChain:
                          weight=donation.weight,
                          age=donation.age,
                          hla_group=donation.hla_group,
+                         approval_date_1=donation.approval_date_1,
+                         approval_date_2=donation.approval_date_2,
+                         approval_date_3=donation.approval_date_3,
                          timestamp=timeNow,
                          update_from_block=old_index,
                          previous_hash=hashed_block,
@@ -193,7 +203,8 @@ class BlockChain:
                 node_chain = response.json()
                 node_chain = [Block(block['index'], block['donor'], block['organ_name'],block['blood_type'],
                                     block['height'],block['weight'], block['age'], block['hla_group'],
-                                    block['update_from_block'], block['timestamp'], block['previous_hash'],
+                                    block['update_from_block'], block['approval_date_1'], block['approval_date_2'],
+                                    block['approval_date_3'], block['timestamp'], block['previous_hash'],
                                     block['status'], block['nonce']) for block in node_chain]
                 node_chain_length = len(node_chain)
                 count = 0
@@ -230,9 +241,10 @@ class BlockChain:
                 response = requests.get(url)
                 print("Dependence 2")
                 node_chain = response.json()
-                node_chain = [Block(block['index'], block['donor'], block['organ_name'], block['blood_type'],
-                                    block['height'], block['weight'], block['age'], block['hla_group'],
-                                    block['update_from_block'], block['timestamp'], block['previous_hash'],
+                node_chain = [Block(block['index'], block['donor'], block['organ_name'],block['blood_type'],
+                                    block['height'],block['weight'], block['age'], block['hla_group'],
+                                    block['update_from_block'], block['approval_date_1'], block['approval_date_2'],
+                                    block['approval_date_3'], block['timestamp'], block['previous_hash'],
                                     block['status'], block['nonce']) for block in node_chain]
                 node_chain_length = len(node_chain)
                 local_chain_length = len(self.__chain)
