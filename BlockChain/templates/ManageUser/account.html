@@ -186,12 +186,17 @@
             <script>
               $(document).ready(function(){
                 $("#enroll").click(function(){
-                  var current_ip = String(window.location.host);
+                 /* fetch('https://api.ipify.org/?format=json')
+                    .then(result => result.json())
+                    .then(data =>{
+                      ip = String(data.ip);
+                         console.log(ip);*/
+                  var ip = String(window.window.location.host);
                   $.ajax({
                     type: "POST",
                     url: "{{ url_for('BlockRoute.register_node') }}",
                     contentType: "application/json",
-                    data: JSON.stringify({'node': current_ip}),
+                    data: JSON.stringify({'node': ip}),
                     dataType: "json",
                     success: function(response){
                       console.log(response);
@@ -214,5 +219,6 @@
                   });
                 });
               });
+
             </script>
 {% endblock content %}

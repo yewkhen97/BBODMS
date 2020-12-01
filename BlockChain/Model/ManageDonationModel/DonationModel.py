@@ -6,9 +6,7 @@ from flask import session
 
 
 def set_donation(form):
-    timezone = pytz.timezone('Asia/Kuala_Lumpur')
-    timeNow = datetime.now(timezone)
-    timeNow = timeNow.strftime('%Y-%m-%dT%H:%M:%S.%f')
+    timeNow = set_time_now()
     if form.other_hla_group.data:
         hla_group = form.other.data
     else:
@@ -44,13 +42,24 @@ def get_details(id):
     return result
 
 
+def set_time_now():
+    timezone = pytz.timezone('Asia/Kuala_Lumpur')
+    time_now = datetime.now(timezone)
+    time_now = time_now.strftime('%Y-%m-%dT%H:%M:%S.%f')
+    return time_now
+
+
 def set_approve_status(approval, donation):
+    timeNow = set_time_now()
     if current_user.email == "admin000@admin.com":
         donation.approval_status_1 = approval
+        donation.approval_date_1 = timeNow
     elif current_user.email == "admin001@admin.com":
         donation.approval_status_2 = approval
+        donation.approval_date_2 = timeNow
     else:
         donation.approval_status_3 = approval
+        donation.approval_date_3 = timeNow
     db.session.commit()
     if ((donation.approval_status_1 == "Approved") and (donation.approval_status_2 == "Approved")
         and (donation.approval_status_3 == "Approved")):

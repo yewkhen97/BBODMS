@@ -59,17 +59,24 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" crossorigin="anonymous"></script>
           <script>
             var data;
+            var current_ip;
+            const tbodyEl = document.getElementById("tbodyhome");
             if(data!=null)
               data = null;
-            const tbodyEl = document.getElementById("tbodyhome");
-            $(document).ready(function(){
-                  var current_ip = String(window.location.host);
-                  data = [];
+           $(document).ready(function(){
+              var ip
+              /*fetch('https://api.ipify.org/?format=json')
+                    .then(result => result.json())
+                    .then(data =>{
+                      ip = String(data.ip);
+                         console.log(ip);*/
+                   var ip = String(window.location.host);
+                    data = [];
                     $.ajax({
                     type: "POST",
                     url: "{{ url_for('BlockRoute.set_current_session') }}",
                     contentType: "application/json",
-                    data: JSON.stringify({'node': current_ip}),
+                    data: JSON.stringify({'node': ip}),
                     dataType: "json",
                     success: function(response){
                       console.log(response);
@@ -92,13 +99,22 @@
                     error: function(response){
                       console.log(response);
                     }
-                  });
-                });
+                  }); 
+                    });
             function formatDate(date){
                 var datetime = new Date(date);
                 dateStr = datetime.toLocaleDateString('en-GB', {
-                                          day: 'numeric', month: 'short', year: 'numeric'
+                                          day: 'numeric', month: 'short', year: 'numeric',
                                         }).replace(/ /g, '-');
+                return dateStr;
+            }
+            function formatTime(date){
+                var datetime = new Date(date);
+                dateStr = datetime.toLocaleDateString('en-GB', {
+                                          day: 'numeric', month: 'short', year: 'numeric',
+                                          hour: 'numeric', minute: 'numeric', second: 'numeric',
+                                          hour12: true
+                                        });
                 return dateStr;
             }
             $(document).ready(function(){
@@ -115,7 +131,10 @@
                 var printBtn = document.getElementById("btnSection");
                 var block = find_block(index);
                 var previous_hash = cut_hash(block.previous_hash);
-                var formatedDate = formatDate(block.timestamp);
+                var date_created = formatDate(block.timestamp);
+                var time_approved_1 = formatTime(block.approval_date_1);
+                var time_approved_2 = formatTime(block.approval_date_2);
+                var time_approved_3 = formatTime(block.approval_date_3);
                 printTitle.innerHTML = "Detail of Block: "+block.index;
                 printTable.innerHTML = `
                 <tr id="blockPointer"> <td>Updated from Block: </td>
@@ -145,10 +164,18 @@
                 <tr> <td>HLA Group: </td>
                      <td> ${block.hla_group}</td>
                 </tr>
-                <tr> <td>Approve Date: </td>
-                     <td> ${formatedDate}</td>
+                <tr> <td>Block Created Date: </td>
+                     <td> ${date_created}</td>
                 </tr>
-                
+                <tr> <td>Approve Date 1: </td>
+                     <td> ${time_approved_1}</td>
+                </tr>
+                <tr> <td>Approve Date 2: </td>
+                     <td> ${time_approved_2}</td>
+                </tr>
+                <tr> <td>Approve Date 3: </td>
+                     <td> ${time_approved_3}</td>
+                </tr>
                 <tr> <td>Donation Status: </td>
                      <td>${block.status}</td>
                 </tr>

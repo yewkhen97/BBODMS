@@ -67,7 +67,7 @@ def register_node():
         }
         return jsonify(response), 400
     node = data['node']
-
+    print(node)
     result = register_peer(node)
     if result:
         response = {

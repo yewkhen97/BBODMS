@@ -53,8 +53,11 @@ class Donation(db.Model, Serializer):
     hla_group = db.Column(db.String(10), nullable=False)
     register_date = db.Column(db.String, nullable=False)
     approval_status_1 = db.Column(db.String(10), nullable=False, default='pending')
+    approval_date_1 = db.Column(db.String, nullable=True)
     approval_status_2 = db.Column(db.String(10), nullable=False, default='pending')
+    approval_date_2 = db.Column(db.String, nullable=True)
     approval_status_3 = db.Column(db.String(10), nullable=False, default='pending')
+    approval_date_3 = db.Column(db.String, nullable=True)
     block_index = db.Column(db.Integer, nullable=True)
     update_block = db.Column(db.Boolean, default=False)
     applier_details = db.Column(db.String, nullable=True)
@@ -69,10 +72,11 @@ class Donation(db.Model, Serializer):
     def serializable(self):
         return {'id': self.id, 'donor': self.donor, 'organ_name': self.organ_name, 'blood_type': self.blood_type,
                 'height': self.height, 'weight': self.weight, 'age': self.age, 'hla_group': self.hla_group,
-                'register_date': self.register_date, 'approval_status_1':self.approval_status_1,
-                'approval_status_2':self.approval_status_2, 'approval_status_3':self.approval_status_3,
-                'block_index': self.block_index, 'update_block': self.update_block,
-                'applier_details': self.applier_details, 'user_id': self.user_id }
+                'register_date': self.register_date, 'approval_status_1': self.approval_status_1,
+                'approval_date_1': self.approval_date_1, 'approval_status_2':self.approval_status_2,
+                'approval_date_2': self.approval_date_2, 'approval_status_3':self.approval_status_3,
+                'approval_date_3': self.approval_date_3, 'block_index': self.block_index,
+                'update_block': self.update_block, 'applier_details': self.applier_details, 'user_id': self.user_id }
 
 
 class Node(db.Model):
