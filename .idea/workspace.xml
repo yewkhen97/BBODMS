@@ -20,38 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="03dc991c-d54a-47b8-8790-afa43f513ac1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChain/BlockChain.py" beforeDir="false" afterPath="$PROJECT_DIR$/BlockChain/BlockChain.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChain/Controller/ViewBlock/BlockRoute.py" beforeDir="false" afterPath="$PROJECT_DIR$/BlockChain/Controller/ViewBlock/BlockRoute.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BlockChain/Controller/ManageDonation/DonationRoute.py" beforeDir="false" afterPath="$PROJECT_DIR$/BlockChain/Controller/ManageDonation/DonationRoute.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BlockChain/Model/ManageDonationModel/DonationModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/BlockChain/Model/ManageDonationModel/DonationModel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChain/database.db" beforeDir="false" afterPath="$PROJECT_DIR$/BlockChain/database.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChain/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/BlockChain/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChain/templates/ManageUser/account.html" beforeDir="false" afterPath="$PROJECT_DIR$/BlockChain/templates/ManageUser/account.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChain/templates/ViewBlock/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/BlockChain/templates/ViewBlock/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5000/Block 0.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5000/Block 1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5000/Block 10.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5000/Block 11.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5000/Block 2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5000/Block 3.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5000/Block 4.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5000/Block 5.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5000/Block 6.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5000/Block 7.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5000/Block 8.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5000/Block 9.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5001/Block 0.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5001/Block 1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5001/Block 10.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5001/Block 11.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5001/Block 2.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5001/Block 3.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5001/Block 4.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5001/Block 5.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5001/Block 6.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5001/Block 7.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5001/Block 8.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChainFile5001/Block 9.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -281,22 +251,22 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1606591161503" />
-    <state width="1515" height="198" key="GridCell.Tab.0.bottom" timestamp="1606791049547">
+    <state width="1515" height="198" key="GridCell.Tab.0.bottom" timestamp="1606895231849">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="198" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1606791049547" />
-    <state width="1515" height="198" key="GridCell.Tab.0.center" timestamp="1606791049547">
+    <state width="1515" height="198" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1606895231849" />
+    <state width="1515" height="198" key="GridCell.Tab.0.center" timestamp="1606895231849">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="198" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1606791049547" />
-    <state width="1515" height="198" key="GridCell.Tab.0.left" timestamp="1606791049547">
+    <state width="1515" height="198" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1606895231849" />
+    <state width="1515" height="198" key="GridCell.Tab.0.left" timestamp="1606895231848">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="198" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1606791049547" />
-    <state width="1515" height="198" key="GridCell.Tab.0.right" timestamp="1606791049547">
+    <state width="1515" height="198" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1606895231848" />
+    <state width="1515" height="198" key="GridCell.Tab.0.right" timestamp="1606895231849">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="198" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1606791049547" />
+    <state width="1515" height="198" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1606895231849" />
     <state width="1515" height="261" key="GridCell.Tab.1.bottom" timestamp="1605292549144">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
