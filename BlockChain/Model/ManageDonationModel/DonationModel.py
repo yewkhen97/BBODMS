@@ -68,49 +68,28 @@ def set_approve_status(approval, donation):
 
 def retrieve_confirmed_donation():
     new_donation = Donation.query.filter_by(approval_status_1='Approved', approval_status_2='Approved',
-                                            approval_status_3='Approved').first()
+                                            approval_status_3='Approved')
     new_mine = BlockChain(session['current_node'])
     new_mine.chain_retrive()
     node_list = get_peer()
     for node in node_list:
         new_mine.peer.add(node['node_address'])
-    if new_mine.mine(new_donation):
-        if new_mine.resolve_conflict:
-            return False
-        new_donation.approval_status_1 = "Added"
-        new_donation.approval_status_2 = "Added"
-        new_donation.approval_status_3 = "Added"
-    else:
-        print("Resolve conflict: ",new_mine.resolve_conflict)
-        print("some thing wrong when adding new block")
-        new_donation.approval_status_1 = "Approved"
-        new_donation.approval_status_2 = "Approved"
-        new_donation.approval_status_3 = "Approved"
-    db.session.commit()
-    return True
-
-
-def mine_new_block():
-    donation_list = Donation.query.filter_by(approval_status_1='Approved', approval_status_2='Approved',
-                                            approval_status_3='Approved')
-    new_mine = BlockChain(session['current_node'])
-    new_mine.chain_retrive()
-    new_mine.load_node()
-    for donation in donation_list:
-        if new_mine.resolve_conflict:
-            return False
+    for donation in new_donation:
         if new_mine.mine(donation):
-            donation.approval_status_1 = 'Added'
-            donation.approval_status_2 = 'Added'
-            donation.approval_status_3 = 'Added'
+            if new_mine.resolve_conflict:
+                return False
+            new_donation.approval_status_1 = "Added"
+            new_donation.approval_status_2 = "Added"
+            new_donation.approval_status_3 = "Added"
         else:
-            print("Resolve conflict: ", new_mine.resolve_conflict)
+            print("Resolve conflict: ",new_mine.resolve_conflict)
             print("some thing wrong when adding new block")
-            donation.approval_status_1 = 'Approved'
-            donation.approval_status_2 = 'Approved'
-            donation.approval_status_3 = 'Approved'
+            new_donation.approval_status_1 = "Approved"
+            new_donation.approval_status_2 = "Approved"
+            new_donation.approval_status_3 = "Approved"
     db.session.commit()
     return True
+
 
 def get_peer():
     all_node = Node.query.all()

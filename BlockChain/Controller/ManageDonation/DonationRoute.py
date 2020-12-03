@@ -1,10 +1,10 @@
 from flask import (render_template, url_for, flash,
-                   redirect, request, Blueprint, jsonify, json)
+                   redirect, request, Blueprint, jsonify)
 from flask_login import login_required
-from BlockChain.Controller.ManageDonation.Form import DonationForm,approvalForm
+from BlockChain.Controller.ManageDonation.Form import DonationForm
 from BlockChain.Model.ManageDonationModel.DonationModel import (set_donation, get_pending_list, get_details,
                                                                 set_approve_status,get_donation_list,
-                                                                retrieve_confirmed_donation, mine_new_block)
+                                                                )
 
 ManageDonation = Blueprint('ManageDonation', __name__)
 
