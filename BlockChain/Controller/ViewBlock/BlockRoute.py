@@ -17,8 +17,6 @@ def home():
 @BlockRoute.route("/chain", methods=['GET'])
 def retrieve_chain():
     local_chain = get_chain()
-    for block in local_chain:
-        print("Block retrieve: ", block.index)
     dict_chain = [block.__dict__.copy() for block in local_chain]
     return jsonify(dict_chain), 200
 
@@ -27,8 +25,8 @@ def retrieve_chain():
 @login_required
 def update_block():
     block_index = int(request.form["block_index"])
-    chain = get_chain()
-    for block in chain:
+    local_chain = get_chain()
+    for block in local_chain:
         if block.index == block_index:
             target_block = block
     return render_template('ViewBlock/request_update.html', block=target_block)

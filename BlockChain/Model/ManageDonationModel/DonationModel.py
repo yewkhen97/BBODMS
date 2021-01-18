@@ -8,7 +8,7 @@ from flask import session
 def set_donation(form):
     timeNow = set_time_now()
     if form.other_hla_group.data:
-        hla_group = form.other.data
+        hla_group = form.other_hla_group.data
     else:
         hla_group = form.hla_group.data
     donation = Donation(donor=form.donor.data, organ_name=form.organ_name.data, blood_type=form.blood_type.data,
@@ -78,15 +78,15 @@ def retrieve_confirmed_donation():
         if new_mine.mine(donation):
             if new_mine.resolve_conflict:
                 return False
-            new_donation.approval_status_1 = "Added"
-            new_donation.approval_status_2 = "Added"
-            new_donation.approval_status_3 = "Added"
+            donation.approval_status_1 = "Added"
+            donation.approval_status_2 = "Added"
+            donation.approval_status_3 = "Added"
         else:
             print("Resolve conflict: ",new_mine.resolve_conflict)
             print("some thing wrong when adding new block")
-            new_donation.approval_status_1 = "Approved"
-            new_donation.approval_status_2 = "Approved"
-            new_donation.approval_status_3 = "Approved"
+            donation.approval_status_1 = "Approved"
+            donation.approval_status_2 = "Approved"
+            donation.approval_status_3 = "Approved"
     db.session.commit()
     return True
 
