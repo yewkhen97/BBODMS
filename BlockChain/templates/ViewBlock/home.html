@@ -181,11 +181,15 @@
                 </tr>
                 
                 `;
-                
+                `{% if current_user.is_authenticated %}`
 
                 printBtn.innerHTML = `<form id="requestForm" action="/update_block" method="POST"><button id="btnRequest" onclick="request_update()" class="btn btn-default">Request For Transplantation</button>
                 <input type="hidden" name="block_index" value="${index}"></form>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>`;
+                `{% else %}`
+                printBtn.innerHTML = `<form id="requestForm" action="/login" method="POST"><button id="btnRequest" onclick="request_update()" class="btn btn-default">Login to request for transplantation</button>`;
+                `{% endif %}`
+                
                 if(block.status == "Available"){
                   $("#blockPointer").hide();
                 }

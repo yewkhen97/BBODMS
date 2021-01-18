@@ -33,7 +33,6 @@ class Block:
 
 
 class BlockChain:
-    difficulty = 2
 
     def __init__(self, port):
         self.__chain = []
