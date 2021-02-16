@@ -178,6 +178,9 @@ class BlockChain:
         self.add_block(new_block)
         for node in self.peer:
             try:
+                """
+                This code will accessing the peer node, and send the new block with Json object format
+                """
                 url = "http://{}/broadcast_block".format(node)
                 converted_block = new_block.__dict__.copy()
                 response = requests.post(url, json={'block': converted_block})
@@ -192,10 +195,13 @@ class BlockChain:
         return True
 
     def blockchain_consensus(self):
+        """
+        This code will accessing the peer node, and replace the shorter chain with the longer chain
+        All the blockchain will be verified
+        """
         temp_chain = self.chain
         replace = False
         for node in self.peer:
-            print("Consensus 1")
             url = 'http://{}/chain'.format(node)
             try:
                 response = requests.get(url)
@@ -206,18 +212,10 @@ class BlockChain:
                                     block['approval_date_3'], block['timestamp'], block['previous_hash'],
                                     block['status'], block['nonce']) for block in node_chain]
                 node_chain_length = len(node_chain)
-                count = 0
-                for block in node_chain:
-                    print(block.index)
-                print("count:", count)
-                print("Node chain len:", node_chain_length)
                 local_chain_length = len(self.__chain)
-                print("Local chain len:", local_chain_length)
-                print("Consensus 2")
                 if node_chain_length > local_chain_length and verfication.chain_validation(node_chain):
                     temp_chain = node_chain
                     replace = True
-                    print("Consensus 3")
             except requests.exceptions.ConnectionError:
                 continue
         self.resolve_conflict = False
