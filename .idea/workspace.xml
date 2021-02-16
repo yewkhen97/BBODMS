@@ -19,19 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="03dc991c-d54a-47b8-8790-afa43f513ac1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/BlockChain/static/profile_picture/574552938a26229c.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BlockChain/static/profile_picture/d06110d7860d12ee.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/now-ui-kit/profile_picture/574552938a26229c.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/node_modules/now-ui-kit/profile_picture/d06110d7860d12ee.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChain/BlockChain.py" beforeDir="false" afterPath="$PROJECT_DIR$/BlockChain/BlockChain.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChain/Controller/ManageUser/UserRoute.py" beforeDir="false" afterPath="$PROJECT_DIR$/BlockChain/Controller/ManageUser/UserRoute.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChain/Controller/ViewBlock/BlockRoute.py" beforeDir="false" afterPath="$PROJECT_DIR$/BlockChain/Controller/ViewBlock/BlockRoute.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChain/Model/ManageDonationModel/DonationModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/BlockChain/Model/ManageDonationModel/DonationModel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChain/database.db" beforeDir="false" afterPath="$PROJECT_DIR$/BlockChain/database.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlockChain/templates/ViewBlock/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/BlockChain/templates/ViewBlock/home.html" afterDir="false" />
-    </list>
+    <list default="true" id="03dc991c-d54a-47b8-8790-afa43f513ac1" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -202,6 +190,28 @@
       <option name="presentableId" value="Default" />
       <updated>1594561988391</updated>
     </task>
+    <task id="LOCAL-00001" summary="Debug 18/1/2021">
+      <created>1610958364034</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1610958364034</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Debug 18/1/2021">
+      <created>1613446716368</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1613446716368</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Debug 18/1/2021">
+      <created>1613446820523</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1613446820523</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -218,6 +228,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="Debug 18/1/2021" />
+    <option name="LAST_COMMIT_MESSAGE" value="Debug 18/1/2021" />
   </component>
   <component name="WindowStateProjectService">
     <state x="395" y="90" key="#Inspections" timestamp="1605014441279">
@@ -244,6 +256,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="515" y="267" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1536.824@0.0.1536.824" timestamp="1605288906100" />
+    <state x="395" y="0" key="CommitChangelistDialog2" timestamp="1613446819173">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="395" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1613446819173" />
     <state x="147" y="65" key="DiffContextDialog" timestamp="1606589285833">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -256,22 +272,22 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1606591161503" />
-    <state width="1515" height="187" key="GridCell.Tab.0.bottom" timestamp="1610957351414">
+    <state width="1515" height="187" key="GridCell.Tab.0.bottom" timestamp="1610958497534">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="187" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1610957351414" />
-    <state width="1515" height="187" key="GridCell.Tab.0.center" timestamp="1610957351413">
+    <state width="1515" height="187" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1610958497534" />
+    <state width="1515" height="187" key="GridCell.Tab.0.center" timestamp="1610958497534">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="187" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1610957351413" />
-    <state width="1515" height="187" key="GridCell.Tab.0.left" timestamp="1610957351413">
+    <state width="1515" height="187" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1610958497534" />
+    <state width="1515" height="187" key="GridCell.Tab.0.left" timestamp="1610958497534">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="187" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1610957351413" />
-    <state width="1515" height="187" key="GridCell.Tab.0.right" timestamp="1610957351413">
+    <state width="1515" height="187" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1610958497534" />
+    <state width="1515" height="187" key="GridCell.Tab.0.right" timestamp="1610958497534">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="187" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1610957351413" />
+    <state width="1515" height="187" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1610958497534" />
     <state width="1515" height="261" key="GridCell.Tab.1.bottom" timestamp="1605292549144">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -292,6 +308,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="277" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1606593106149" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1613446567729">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1613446567729" />
     <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1605259144990">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
